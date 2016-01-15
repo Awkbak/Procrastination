@@ -5,7 +5,7 @@ using UnityEngine.UI;
 public class DebugScript : MonoBehaviour {
 
     public static DebugScript d;
-    public Text text;
+    private Text text;
 
     private int lines = 0;
     public int maxLines = 15;
@@ -14,6 +14,7 @@ public class DebugScript : MonoBehaviour {
 	// Use this for initialization
 	void Awake () {
         d = this;
+        text = GetComponent<Text>();
 	}
 	
 	public void print(string line)
