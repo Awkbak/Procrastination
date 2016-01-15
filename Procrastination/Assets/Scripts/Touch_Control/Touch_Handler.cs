@@ -15,18 +15,18 @@ public class Touch_Handler : MonoBehaviour {
         RaycastHit hit = new RaycastHit();
 	    for(int e = 0; e < Input.touchCount; ++e)
         {
-            print("Touch");
+            DebugScript.d.println("Touch");
             Ray ray = Camera.main.ScreenPointToRay(Input.GetTouch(e).position);
-            if (Physics.Raycast(ray, out hit, 9.9f))
+            if (Physics.Raycast(ray, out hit, 10.1f))
             {
-                print("Hit");
+                DebugScript.d.println("Hit");
                 Touch touch = Input.GetTouch(e);
                 if(touch.phase == TouchPhase.Began || touch.phase == TouchPhase.Moved)
                 {
 
                     if (hit.collider.CompareTag("Draggable"))
                     {
-                        print("Draggable");
+                        DebugScript.d.println("Draggable");
                         Vector2 touchPos = Camera.main.ScreenToWorldPoint(new Vector3(touch.position.x, touch.position.y, 10));
                         hit.collider.GetComponent<Draggable>().OnTouchDrag(touchPos);
                     }

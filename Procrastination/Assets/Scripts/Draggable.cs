@@ -3,6 +3,9 @@ using System.Collections;
 
 public class Draggable : MonoBehaviour {
 
+
+    protected int tileSize = 2;
+
     #if UNITY_EDITOR || UNITY_STANDALONE || UNITY_WEBPLAYER
     void OnMouseDrag()
     {
@@ -15,8 +18,8 @@ public class Draggable : MonoBehaviour {
     #endif
     public void OnTouchDrag(Vector2 mousePos)
     {
-        mousePos.x -= mousePos.x % 2;
-        mousePos.y -= mousePos.y % 2;
+        mousePos.x -= mousePos.x % tileSize;
+        mousePos.y -= mousePos.y % tileSize;
         transform.position = new Vector3(mousePos.x, 0, mousePos.y);
     }
 

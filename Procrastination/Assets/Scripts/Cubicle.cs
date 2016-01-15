@@ -5,11 +5,6 @@ public class Cubicle : Draggable {
 
 	// Use this for initialization
 	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
+        tileSize = 3;
 	}
 }
