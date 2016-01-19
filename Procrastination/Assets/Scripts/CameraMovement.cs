@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class CameraMovement : MonoBehaviour {
+public class CameraMovement : Draggable {
 
     #if UNITY_EDITOR || UNITY_STANDALONE || UNITY_WEBPLAYER
     public Vector2 screenSize;
@@ -34,5 +34,33 @@ public class CameraMovement : MonoBehaviour {
             transform.Translate(0, panSpeed * Time.deltaTime, 0);
         }
 	}
-    #endif
+#endif
+
+#if UNITY_ANDROID || UNITY_IPHONE
+
+    private bool reset = true;
+    private Vector2 lastTouchPos = Vector2.zero;
+    private Vector2 curTouchPos = Vector2.zero;
+    private float speedFactor = 20.0f;
+    public new void OnTouchDrag(Vector2 mousePos)
+    {
+        if (reset)
+        {
+            reset = false;
+            curTouchPos = mousePos;
+            return;
+        }
+        lastTouchPos = curTouchPos;
+        curTouchPos = mousePos;
+
+        Vector2 movement = (lastTouchPos - curTouchPos) * speedFactor * Time.deltaTime;
+        transform.Translate(movement.x, movement.y, 0);
+        DebugScript.d.println(movement.x + " : " + movement.y);
+    }
+
+    public void endDrag()
+    {
+        reset = true;
+    }
+#endif
 }

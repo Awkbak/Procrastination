@@ -29,13 +29,28 @@ public class Touch_Handler : MonoBehaviour {
             {
                 if(touch.phase == TouchPhase.Ended || touch.phase == TouchPhase.Canceled)
                 {
+                    CameraMovement cam = drag.GetComponent<CameraMovement>();
+                    if(cam != null)
+                    {
+                        cam.endDrag();
+                    }
                     used.Remove(touch.fingerId);
                 }
                 else if(touch.phase == TouchPhase.Moved)
                 {
                     Vector3 touchPos = Camera.main.ScreenToWorldPoint(new Vector3(touch.position.x, touch.position.y, 10));
                     touchPos.y = touchPos.z;
-                    drag.OnTouchDrag((Vector2)touchPos);
+
+                    CameraMovement cam = drag.GetComponent<CameraMovement>();
+                    if (cam == null)
+                    {
+                         drag.OnTouchDrag(touchPos);
+                    }
+                    else
+                    {
+                        cam.OnTouchDrag(touchPos);
+                    }
+
                 }
             }
             else
@@ -50,11 +65,22 @@ public class Touch_Handler : MonoBehaviour {
                         if (hit.collider.CompareTag("Draggable"))
                         {
                             Vector3 touchPos = Camera.main.ScreenToWorldPoint(new Vector3(touch.position.x, touch.position.y, 10));
-                            drag = hit.collider.GetComponent<Draggable>();
                             touchPos.y = touchPos.z;
+                            drag = hit.collider.GetComponent<Draggable>();
+
                             drag.OnTouchDrag((Vector2)touchPos);
                             used.Add(touch.fingerId, drag);
                         }
+                        else if (hit.collider.CompareTag("Ground"))
+                        {
+                            Vector3 touchPos = Camera.main.ScreenToWorldPoint(new Vector3(touch.position.x, touch.position.y, 10));
+                            touchPos.y = touchPos.z;
+                            drag = Camera.main.GetComponent<Draggable>();
+                            CameraMovement cam = drag.GetComponent<CameraMovement>();
+                            cam.OnTouchDrag(touchPos);
+                            used.Add(touch.fingerId, drag);
+                        }
+                        
 
                     }
                 }

@@ -21,6 +21,7 @@ public class Draggable : MonoBehaviour {
         mousePos.x -= mousePos.x % tileSize;
         mousePos.y -= mousePos.y % tileSize;
         transform.position = new Vector3(mousePos.x, 0, mousePos.y);
+        DebugScript.d.println("Called wrong draggable");
     }
 
 }
