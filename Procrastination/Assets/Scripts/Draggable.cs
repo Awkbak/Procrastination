@@ -5,6 +5,8 @@ public class Draggable : MonoBehaviour {
 
 
     protected int tileSize = 2;
+    protected CheckGen child;
+    protected bool reset = true;
 
     #if UNITY_EDITOR || UNITY_STANDALONE || UNITY_WEBPLAYER
     void OnMouseDrag()
@@ -18,10 +20,31 @@ public class Draggable : MonoBehaviour {
     #endif
     public void OnTouchDrag(Vector2 mousePos)
     {
+        if (reset)
+        {
+            transform.Translate(0, 1.0f, 0);
+            reset = false;
+            child.appear();
+        }
         mousePos.x -= mousePos.x % tileSize;
         mousePos.y -= mousePos.y % tileSize;
-        transform.position = new Vector3(mousePos.x, 0, mousePos.y);
-        DebugScript.d.println("Called wrong draggable");
+        if (!mousePos.Equals(transform.position))
+        {
+            child.recheck();
+            transform.position = new Vector3(mousePos.x, transform.position.y, mousePos.y);
+        }
     }
+
+    public void endDrag()
+    {
+        reset = true;
+        transform.Translate(0, -1.0f, 0);
+    }
+
+    public int getSize()
+    {
+        return tileSize;
+    }
+
 
 }

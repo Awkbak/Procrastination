@@ -38,7 +38,6 @@ public class CameraMovement : Draggable {
 
 #if UNITY_ANDROID || UNITY_IPHONE
 
-    private bool reset = true;
     private Vector2 lastTouchPos = Vector2.zero;
     private Vector2 curTouchPos = Vector2.zero;
     private float speedFactor = 20.0f;
@@ -55,10 +54,9 @@ public class CameraMovement : Draggable {
 
         Vector2 movement = (lastTouchPos - curTouchPos) * speedFactor * Time.deltaTime;
         transform.Translate(movement.x, movement.y, 0);
-        DebugScript.d.println(movement.x + " : " + movement.y);
     }
 
-    public void endDrag()
+    public new void endDrag()
     {
         reset = true;
     }

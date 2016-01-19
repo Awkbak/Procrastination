@@ -35,6 +35,16 @@ public class DebugScript : MonoBehaviour {
         }
     }
 
+    public void println(Vector3 vector)
+    {
+        println(vector.x + " : " + vector.y + " : " + vector.x);
+    }
+
+    public void println(Vector2 vector)
+    {
+        println(vector.x + " : " + vector.y);
+    }
+
     public void clear()
     {
         text.text = "";

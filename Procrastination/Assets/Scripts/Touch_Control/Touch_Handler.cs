@@ -34,6 +34,10 @@ public class Touch_Handler : MonoBehaviour {
                     {
                         cam.endDrag();
                     }
+                    else
+                    {
+                        drag.endDrag();
+                    }
                     used.Remove(touch.fingerId);
                 }
                 else if(touch.phase == TouchPhase.Moved)
