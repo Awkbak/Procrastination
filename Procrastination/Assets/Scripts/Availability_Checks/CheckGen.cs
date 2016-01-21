@@ -16,11 +16,18 @@ public class CheckGen : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        size = parent.getSize();
-        panels = new GameObject[size * size];
-        panelMats = new Renderer[size * size];
+        size = transform.childCount;
+        panels = new GameObject[transform.childCount];
+        panelMats = new Renderer[transform.childCount];
         int index = 0;
-        for(int e = 0; e < size; ++e)
+        foreach(Transform t in transform)
+        {
+            panels[index] = t.gameObject;
+            panelMats[index] = t.GetComponent<Renderer>();
+            panels[index].SetActive(false);
+            ++index;
+        }
+        /*for(int e = 0; e < size; ++e)
         {
             for(int a = 0; a < size; ++a)
             {
@@ -30,8 +37,7 @@ public class CheckGen : MonoBehaviour {
                 panelMats[index] = panels[index].GetComponent<Renderer>();
                 ++index;
             }
-        }
-        disappear();
+        }*/
 	}
 	
 	public void setParent(Draggable p)
@@ -41,7 +47,7 @@ public class CheckGen : MonoBehaviour {
 
     public bool disappear()
     {
-        for(int e = 0; e < size * size; ++e)
+        for(int e = 0; e < size; ++e)
         {
             panels[e].SetActive(false);
         }
@@ -50,7 +56,7 @@ public class CheckGen : MonoBehaviour {
 
     public void appear()
     {
-        for (int e = 0; e < size * size; ++e)
+        for (int e = 0; e < size; ++e)
         {
             panels[e].SetActive(true);
         }
@@ -61,25 +67,20 @@ public class CheckGen : MonoBehaviour {
     {
         //Stopwatch watch = Stopwatch.StartNew();
         
-        int index = 0;
         for (int e = 0; e < size; ++e)
         {
-            for (int a = 0; a < size; ++a)
+            RaycastHit hit = new RaycastHit();
+            Ray ray = new Ray(panels[e].transform.position, new Vector3(0, -1, 0));
+            if(Physics.Raycast(ray, out hit, 1.5f))
             {
-                RaycastHit hit = new RaycastHit();
-                Ray ray = new Ray(panels[index].transform.position, new Vector3(0, -1, 0));
-                if(Physics.Raycast(ray, out hit, 1.5f))
+                if (!hit.collider.CompareTag("Ground"))
                 {
-                    if (!hit.collider.CompareTag("Ground"))
-                    {
-                        panelMats[index].material = matBad;
-                    }
-                    else
-                    {
-                        panelMats[index].material = matGood;
-                    }
+                    panelMats[e].material = matBad;
                 }
-                ++index;
+                else
+                {
+                    panelMats[e].material = matGood;
+                }
             }
         }
         //print(watch.ElapsedMilliseconds);

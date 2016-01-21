@@ -4,7 +4,7 @@ using System.Collections;
 public class Draggable : MonoBehaviour {
 
 
-    protected int tileSize = 2;
+    private int tileSize = 1;
     protected CheckGen child;
     protected bool reset = true;
 
@@ -39,6 +39,7 @@ public class Draggable : MonoBehaviour {
     {
         reset = true;
         transform.Translate(0, -1.0f, 0);
+        child.disappear();
     }
 
     public int getSize()
