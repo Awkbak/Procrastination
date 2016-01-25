@@ -19,7 +19,7 @@ public class Touch_Handler : MonoBehaviour {
         {
             Application.Quit();
         }
-#endif
+        #endif
         Draggable drag;
         RaycastHit hit = new RaycastHit();
 	    for(int e = 0; e < Input.touchCount; ++e)
@@ -68,19 +68,29 @@ public class Touch_Handler : MonoBehaviour {
 
                         if (hit.collider.CompareTag("Draggable"))
                         {
+
+                            drag = hit.collider.GetComponent<Draggable>();
+                            if (drag.isDragged())
+                            {
+                                continue;
+                            }
                             Vector3 touchPos = Camera.main.ScreenToWorldPoint(new Vector3(touch.position.x, touch.position.y, 10));
                             touchPos.y = touchPos.z;
-                            drag = hit.collider.GetComponent<Draggable>();
-
                             drag.OnTouchDrag((Vector2)touchPos);
                             used.Add(touch.fingerId, drag);
                         }
                         else if (hit.collider.CompareTag("Ground"))
                         {
-                            Vector3 touchPos = Camera.main.ScreenToWorldPoint(new Vector3(touch.position.x, touch.position.y, 10));
-                            touchPos.y = touchPos.z;
                             drag = Camera.main.GetComponent<Draggable>();
                             CameraMovement cam = drag.GetComponent<CameraMovement>();
+                            if (cam.isDragged())
+                            {
+                                continue;
+                            }
+
+                            Vector3 touchPos = Camera.main.ScreenToWorldPoint(new Vector3(touch.position.x, touch.position.y, 10));
+                            touchPos.y = touchPos.z;
+                            
                             cam.OnTouchDrag(touchPos);
                             used.Add(touch.fingerId, drag);
                         }

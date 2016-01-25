@@ -60,5 +60,10 @@ public class CameraMovement : Draggable {
     {
         reset = true;
     }
+
+    public new bool isDragged()
+    {
+        return !reset;
+    }
 #endif
 }

@@ -7,7 +7,6 @@ public class CheckGen : MonoBehaviour {
     private Draggable parent;
     private GameObject[] panels;
     private Renderer[] panelMats;
-    public GameObject panelPrefab;
     public Material matGood;
     public Material matBad;
     private int size;
@@ -27,17 +26,6 @@ public class CheckGen : MonoBehaviour {
             panels[index].SetActive(false);
             ++index;
         }
-        /*for(int e = 0; e < size; ++e)
-        {
-            for(int a = 0; a < size; ++a)
-            {
-                panels[index] = Instantiate(panelPrefab, transform.position, Quaternion.identity) as GameObject;
-                panels[index].transform.SetParent(this.transform);
-                panels[index].transform.Translate(1 * e, 0, -1 * a);
-                panelMats[index] = panels[index].GetComponent<Renderer>();
-                ++index;
-            }
-        }*/
 	}
 	
 	public void setParent(Draggable p)

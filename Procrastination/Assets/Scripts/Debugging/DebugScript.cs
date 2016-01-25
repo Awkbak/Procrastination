@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using System.IO;
 
 public class DebugScript : MonoBehaviour {
 
@@ -13,11 +14,39 @@ public class DebugScript : MonoBehaviour {
 
 	// Use this for initialization
 	void Awake () {
+        #if !Unity_EDITOR && DEVELOPMENT_BUILD
+        Application.logMessageReceivedThreaded += handleLog;
+        #endif
         d = this;
         text = GetComponent<Text>();
 	}
-	
-	public void print(string line)
+
+    #if !Unity_EDITOR && DEVELOPMENT_BUILD
+    private void handleLog(string logString, string stackTrace, LogType type)
+    {
+        if (type.Equals(LogType.Log))
+        {
+            println(logString);
+        }
+        else if(type.Equals(LogType.Warning))
+        {
+            println(type + ": " + logString);
+        }
+        else
+        {
+            if (stackTrace.Length < 50)
+            {
+                println(type + ": " + logString + " " + stackTrace);
+            }
+            else
+            {
+                println(type + ": " + logString + " " + stackTrace.Substring(0, 50));
+            }
+        }
+    }
+    #endif
+
+    public void print(string line)
     {
         text.text += line;
     }

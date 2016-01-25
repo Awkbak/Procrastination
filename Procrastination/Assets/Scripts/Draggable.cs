@@ -47,5 +47,10 @@ public class Draggable : MonoBehaviour {
         return tileSize;
     }
 
+    public bool isDragged()
+    {
+        return !reset;
+    }
+
 
 }
