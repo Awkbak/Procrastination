@@ -25,12 +25,14 @@ ModelImporter:
     2300006: Cylinder
     2300008: Sphere
     2300010: Sphere_003
+    2300012: //RootNode
     3300000: Cube
     3300002: Cube_001
     3300004: Cube_002
     3300006: Cylinder
     3300008: Sphere
     3300010: Sphere_003
+    3300012: //RootNode
     4300000: Sphere
     4300002: Cube_002
     4300004: Cylinder
