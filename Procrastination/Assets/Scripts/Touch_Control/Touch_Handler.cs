@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.EventSystems;
 
 public class Touch_Handler : MonoBehaviour {
 
@@ -13,10 +14,18 @@ public class Touch_Handler : MonoBehaviour {
     /// </summary>
     Dictionary<int, Draggable> used = new Dictionary<int, Draggable>();
 
+    /// <summary>
+    /// Holds the Event System in order to check if a touch is over the UI
+    /// </summary>
+    EventSystem eventSystem;
+
     void Awake()
     {
         //Make sure we are in landscape mode
         Screen.orientation = ScreenOrientation.LandscapeLeft;
+
+        //Fetch the current event system
+        eventSystem = EventSystem.current;
     }
 
 	// Update is called once per frame
@@ -76,8 +85,8 @@ public class Touch_Handler : MonoBehaviour {
                     }
 
                 }
-            }//If the touch isn't being used
-            else
+            }//If the touch isn't being used and isn't over a UI object
+            else if(!eventSystem.IsPointerOverGameObject(touch.fingerId))
             {
                 //Get a ray based on touch position sand see what it hits
                 Ray ray = Camera.main.ScreenPointToRay(touch.position);

@@ -25,7 +25,7 @@ public class DebugScript : MonoBehaviour {
     /// <summary>
     /// Max number of lines the console can display (Default = 15)
     /// </summary>
-    public int maxLines = 15;
+    private int maxLines = 15;
 
 
 	// Use this for initialization
@@ -58,13 +58,13 @@ public class DebugScript : MonoBehaviour {
             //Wrapping lines messes up the console
             //This curbs it a bit, but still allows for some stack output
             //Since in an error, reading what's wrong is most important
-            if (stackTrace.Length < 50)
+            if (stackTrace.Length < 100)
             {
                 println(type + ": " + logString + " " + stackTrace);
             }
             else
             {
-                println(type + ": " + logString + " " + stackTrace.Substring(0, 50));
+                println(type + ": " + logString + " " + stackTrace.Substring(0, 100));
             }
         }
     }
