@@ -58,13 +58,13 @@ public class DebugScript : MonoBehaviour {
             //Wrapping lines messes up the console
             //This curbs it a bit, but still allows for some stack output
             //Since in an error, reading what's wrong is most important
-            if (stackTrace.Length < 100)
+            if (stackTrace.Length < 250)
             {
                 println(type + ": " + logString + " " + stackTrace);
             }
             else
             {
-                println(type + ": " + logString + " " + stackTrace.Substring(0, 100));
+                println(type + ": " + logString + " " + stackTrace.Substring(0, 250));
             }
         }
     }
