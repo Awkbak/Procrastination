@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.EventSystems;
 
 public class Touch_Handler : MonoBehaviour {
 
@@ -9,14 +10,29 @@ public class Touch_Handler : MonoBehaviour {
     #if UNITY_ANDROID || UNITY_IPHONE
 
     /// <summary>
+    /// Reference to script that handles touches
+    /// </summary>
+    public static Touch_Handler handler;
+
+    /// <summary>
     /// Holds a dictionary of actively used touches and what they are interacting with
     /// </summary>
     Dictionary<int, Draggable> used = new Dictionary<int, Draggable>();
+
+    /// <summary>
+    /// Holds the Event System in order to check if a touch is over the UI
+    /// </summary>
+    EventSystem eventSystem;
 
     void Awake()
     {
         //Make sure we are in landscape mode
         Screen.orientation = ScreenOrientation.LandscapeLeft;
+
+        //Fetch the current event system
+        eventSystem = EventSystem.current;
+
+        handler = this;
     }
 
 	// Update is called once per frame
@@ -76,8 +92,8 @@ public class Touch_Handler : MonoBehaviour {
                     }
 
                 }
-            }//If the touch isn't being used
-            else
+            }//If the touch isn't being used and isn't over a UI object
+            else if(!eventSystem.IsPointerOverGameObject(touch.fingerId))
             {
                 //Get a ray based on touch position sand see what it hits
                 Ray ray = Camera.main.ScreenPointToRay(touch.position);
@@ -126,5 +142,24 @@ public class Touch_Handler : MonoBehaviour {
             }
         }
 	}
+
+    /// <summary>
+    /// Add an object to the used dictionary and start dragging it
+    /// </summary>
+    /// <param name="touchID">The touch associated with the object</param>
+    /// <param name="obj">Object to be dragged</param>
+    public void addObject(int touchID, Draggable obj)
+    {
+        //Add to the used dictionary
+        used.Add(touchID, obj);
+
+        //Get the touch and its world position
+        Touch touch = Input.GetTouch(touchID);
+        Vector3 touchPos = Camera.main.ScreenToWorldPoint(new Vector3(touch.position.x, touch.position.y, 10));
+        touchPos.y = touchPos.z;
+
+        //Move the object to that position
+        obj.OnTouchDrag(touchPos);
+    }
     #endif
 }
