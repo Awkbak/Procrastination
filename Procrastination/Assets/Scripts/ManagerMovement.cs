@@ -36,7 +36,7 @@ public class ManagerMovement : MonoBehaviour {
             path += current.x + ":" + current.y + "  :  ";
             Debug.Log(path);
         }
-
+        
     }
 
 }
