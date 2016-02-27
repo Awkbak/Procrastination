@@ -6,6 +6,7 @@ using UnityEngine.EventSystems;
 public class Touch_Handler : MonoBehaviour {
 
 
+
     //Touches only exist on mobile
     #if UNITY_ANDROID || UNITY_IPHONE
 
@@ -160,6 +161,40 @@ public class Touch_Handler : MonoBehaviour {
 
         //Move the object to that position
         obj.OnTouchDrag(touchPos);
+    }
+
+
+    /// <summary>
+    /// Returns the tag of the object under the designated position
+    /// </summary>
+    /// <param name="x">X position to check</param>
+    /// <param name="y">Y Position to check</param>
+    /// <returns></returns>
+    public string raycast(int x, int y)
+    {
+        return raycast(new Vector2(x, y));
+    }
+
+    /// <summary>
+    /// Returns the tag of the object under the designated position
+    /// </summary>
+    /// <param name="pos">Position to check</param>
+    /// <returns></returns>
+    public string raycast(Vector2 pos)
+    {
+        //Create the hit object and ray
+        RaycastHit hit = new RaycastHit();
+        Ray ray = new Ray(new Vector3(pos.x, 10.0f, pos.y), new Vector3(0, -1, 0));
+
+        //Draw the ray for debugging
+        Debug.DrawRay(new Vector3(pos.x, 10.0f, pos.y), new Vector3(0, -1, 0), Color.green, 10.0f);
+        //Cast out the ray and return it's tag if there is a hit
+        if (Physics.Raycast(ray, out hit, 10.1f))
+        {
+            return hit.collider.tag;
+        }
+        //If no hit, then return an empty string
+        return "";
     }
     #endif
 }

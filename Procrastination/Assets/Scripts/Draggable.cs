@@ -17,6 +17,11 @@ public class Draggable : MonoBehaviour {
     protected bool reset = true;
 
     /// <summary>
+    /// The position of the object when the drag started
+    /// </summary>
+    private Vector3 oldPosition;
+
+    /// <summary>
     /// Handles movement when not on mobile
     /// </summary>
     #if UNITY_EDITOR || UNITY_STANDALONE || UNITY_WEBPLAYER
@@ -29,6 +34,11 @@ public class Draggable : MonoBehaviour {
         newPos.y = newPos.z;
         OnTouchDrag(newPos);
     }
+
+    void OnMouseUp()
+    {
+        endDrag();
+    }
     #endif
 
     /// <summary>
@@ -40,6 +50,9 @@ public class Draggable : MonoBehaviour {
         //If the drag just started
         if (reset)
         {
+            //Save old location
+            oldPosition = transform.position;
+
             //Raise the object up and make obstruction panels appear
             transform.Translate(0, 1.0f, 0);
             reset = false;
@@ -63,16 +76,24 @@ public class Draggable : MonoBehaviour {
     public void endDrag()
     {
         reset = true;
-        //Move back down to normal height and make panels dissapear
-        transform.Translate(0, -1.0f, 0);
-        child.disappear();
+
+        //Make panels dissapear and check if on a valid location
+        if (child.disappear())
+        {
+            //Move back down to normal height
+            transform.Translate(0, -1.0f, 0);
+        }
+        else//If on invalid location, move back to old position
+        {
+            transform.position = oldPosition;
+        }
     }
 
     /// <summary>
     /// Gets the snapping size
     /// </summary>
-    /// <returns></returns>
-    public int getSize()
+    /// <returns>The tile size (snapping size in units)</returns>
+    public int getTileSize()
     {
         return tileSize;
     }
