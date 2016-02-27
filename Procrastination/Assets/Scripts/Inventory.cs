@@ -6,15 +6,14 @@ using System;
 public class Inventory : MonoBehaviour{
 
     /// <summary>
+    /// How much money do you have
+    /// </summary>
+    public int money = 2;
+
+    /// <summary>
     /// List of objects the user can spawn
     /// </summary>
     public GameObject[] prefabs;
-
-
-    /// <summary>
-    /// How much money do you have
-    /// </summary>
-    private int money = 2;
 
     /// <summary>
     /// Retreives how much money is available
@@ -43,20 +42,57 @@ public class Inventory : MonoBehaviour{
         }
     }
 
+    /// <summary>
+    /// Spawns a long desk with a chair
+    /// </summary>
+    /// <param name="data">Pointer data sent by Unity</param>
+    public void spawnLongWithChair(BaseEventData data)
+    {
+        spawnGeneric(data, 0, 1);
+    }
+
+    /// <summary>
+    /// Spawns a long desk without a chair
+    /// </summary>
+    /// <param name="data">Pointer data sent by Unity</param>
+    public void spawnLong(BaseEventData data)
+    {
+        spawnGeneric(data, 1, 1);
+    }
+
+    /// <summary>
+    /// Spawns a small desk with a chair
+    /// </summary>
+    /// <param name="data">Pointer data sent by Unity</param>
+    public void spawnSmallWithChair(BaseEventData data)
+    {
+        spawnGeneric(data, 2, 1);
+    }
+
+    /// <summary>
+    /// Spawns a small desk without a chair
+    /// </summary>
+    /// <param name="data">Pointer data sent by Unity</param>
+    public void spawnSmall(BaseEventData data)
+    {
+        spawnGeneric(data, 3, 1);
+    }
 
     /// <summary>
     /// Spawn the generic object to the field
     /// </summary>
     /// <param name="data">Mouse Pointer data sent when called by the Unity Event Trigger</param>
-    public void spawnGeneric(BaseEventData data)
+    /// <param name="prefabIndex">Index of the prefab to spawn</param>
+    /// <param name="price">Price to spawn this item</param>
+    public void spawnGeneric(BaseEventData data, int prefabIndex, int price)
     {
         //Make sure you have enough money
-        if (subtractMoney(1))
+        if (subtractMoney(price))
         {
             PointerEventData pointerData = data as PointerEventData;
 
             //Create Generic game object and get its draggable component
-            Draggable obj = (Instantiate(prefabs[0], transform.position, Quaternion.identity) as GameObject).GetComponent<Draggable>();
+            Draggable obj = (Instantiate(prefabs[prefabIndex], transform.position, Quaternion.identity) as GameObject).GetComponent<Draggable>();
 
             //Touch_Handler doesn't handle mouse clicks
             #if UNITY_ANDROID || UNITY_IPHONE
