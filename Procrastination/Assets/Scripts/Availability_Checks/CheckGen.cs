@@ -68,7 +68,11 @@ public class CheckGen : MonoBehaviour {
         {
             panels[e].SetActive(false);
         }
-        return allGood;
+        if (allGood)
+        {
+            return (AStar.solve() != null);
+        }
+        return false;
     }
 
     /// <summary>
@@ -88,7 +92,8 @@ public class CheckGen : MonoBehaviour {
     /// </summary>
     public void recheck()
     {
-        //Stopwatch watch = Stopwatch.StartNew();
+        allGood = true;
+
         //Go through every panel
         for (int e = 0; e < size; ++e)
         {
@@ -101,6 +106,7 @@ public class CheckGen : MonoBehaviour {
                 //If the ground is hit, there are no obstructions
                 if (!hit.collider.CompareTag("Ground"))
                 {
+                    allGood = false;
                     panelMats[e].material = matBad;
                 }
                 else
@@ -109,7 +115,5 @@ public class CheckGen : MonoBehaviour {
                 }
             }
         }
-        //print(watch.ElapsedMilliseconds);
-        //watch.Reset();
     }
 }
