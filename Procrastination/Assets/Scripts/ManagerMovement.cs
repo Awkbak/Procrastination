@@ -1,17 +1,51 @@
 ﻿using UnityEngine;
+using System.Collections;
 using System.Collections.Generic;
 using System;
 
 public class ManagerMovement : MonoBehaviour {
 
+    /// <summary>
+    /// This objects Rigidbody
+    /// </summary>
+    private Rigidbody rigidbody;
+
+    /// <summary>
+    /// The manager's start position
+    /// </summary>
+    private Vector3 startPos;
+
+    /// <summary>
+    /// The manager's end position (players desk)
+    /// </summary>
+    private Vector3 endPos;
+
+    /// <summary>
+    /// Is this manager currently moving?
+    /// </summary>
+    [SerializeField]
+    private bool moving = false;
+
+    /// <summary>
+    /// Temporary variable to test movement
+    /// </summary>
+    public bool moveTester = false;
+
+    /// <summary>
+    /// This manager's movement speed in Units/Second
+    /// </summary>
+    private float movementSpeed = 5.0f;
+
 	// Use this for initialization
 	void Start () {
+        rigidbody = GetComponent<Rigidbody>();
+
         //Get where the manager starts on the level
-        Vector3 startPos = GameObject.FindGameObjectWithTag("ManagerStart").transform.position;
+        startPos = GameObject.FindGameObjectWithTag("ManagerStart").transform.position;
         //Convert to Vector2
         startPos.y = startPos.z;
         //Get where the player's desk is
-        Vector3 endPos = GameObject.FindGameObjectWithTag("PlayerDesk").transform.position;
+        endPos = GameObject.FindGameObjectWithTag("PlayerDesk").transform.position;
         //Convert to Vector2
         endPos.y = endPos.z;
 
@@ -38,6 +72,73 @@ public class ManagerMovement : MonoBehaviour {
         }
         
     }
+
+    void Update()
+    {
+        if (moveTester)
+        {
+            moveTester = false;
+            startMoving();
+        }
+    }
+
+    public bool recalculate()
+    {
+        //Send positions to AStar
+        AStar.startPos = startPos;
+        AStar.endPos = endPos;
+        //Find the current path
+        return (AStar.solve() == null);
+    }
+
+    public void startMoving()
+    {
+        moving = true;
+        Vector3 startPosTrans = startPos;
+        startPosTrans.z = startPos.y;
+        startPos.y = 0.7f;
+        transform.position = startPos;
+
+        StartCoroutine(move());
+    }
+
+    public void stopMoving()
+    {
+        moving = false;
+    }
+
+    IEnumerator move()
+    {
+        Node nextNode = AStar.solve();
+        Vector3 nextPos = nextNode.generateVector3();
+        while (moving)
+        {
+            print(rigidbody.velocity);
+            Vector3 direction = transform.position - nextPos;
+            direction.y = 0;
+            if(direction.sqrMagnitude < 0.05f)
+            {
+                nextNode = nextNode.child;
+                if(nextNode != null)
+                {
+                    nextPos = nextNode.generateVector3();
+                }
+                else
+                {
+                    print("Done");
+                    moving = false;
+                    yield return null;
+                }
+            }
+            //print(nextPos + " : " + direction);
+            direction.Normalize();
+            rigidbody.velocity = -direction * movementSpeed;
+           
+            yield return null;
+        }
+        rigidbody.velocity = Vector3.zero;
+    }
+
 
 }
 
@@ -284,6 +385,11 @@ public class Node : System.IEquatable<Node>, System.IComparable<Node>
     /// </summary>
     /// <returns>Heuristic cost to the end node</returns>
     public int getH() { return h; }
+
+    public Vector3 generateVector3()
+    {
+        return new Vector3(x, 0, y);
+    }
 
     public bool Equals(Node other)
     {
