@@ -2439,6 +2439,46 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 988acbdcf2f6b0240a2fb79d0d3e202d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &2092683793
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 2092683795}
+  - 114: {fileID: 2092683794}
+  m_Layer: 0
+  m_Name: LevelState
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &2092683794
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2092683793}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 582b9cf5582363e4280320bdc2e8ab03, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentLevelState: 0
+--- !u!4 &2092683795
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2092683793}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 4.0178633, y: 5.1784477, z: -6.337539}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 22
 --- !u!1001 &2119868984
 Prefab:
   m_ObjectHideFlags: 0

@@ -27,17 +27,29 @@ public class Draggable : MonoBehaviour {
     #if UNITY_EDITOR || UNITY_STANDALONE || UNITY_WEBPLAYER
     void OnMouseDrag()
     {
-        //Get the mouse position in world coordinates and send it to OnTOuchDrag
-        Vector3 newPos = Input.mousePosition;
-        newPos.z = 10;
-        newPos = Camera.main.ScreenToWorldPoint(newPos);
-        newPos.y = newPos.z;
-        OnTouchDrag(newPos);
+        if (LevelState.cur.currentLevelState.Equals(LevelState.LevelStates.Build))
+        {
+            print("Drag");
+            //Get the mouse position in world coordinates and send it to OnTOuchDrag
+            Vector3 newPos = Input.mousePosition;
+            newPos.z = 10;
+            newPos = Camera.main.ScreenToWorldPoint(newPos);
+            newPos.y = newPos.z;
+            OnTouchDrag(newPos);
+        }
+        else if(reset == false)
+        {
+            print("No Drag");
+            endDrag();
+        }
     }
 
     void OnMouseUp()
     {
-        endDrag();
+        if (reset == false)
+        {
+            endDrag();
+        }
     }
     #endif
 

@@ -57,11 +57,24 @@ public class Touch_Handler : MonoBehaviour {
             Touch touch = Input.GetTouch(e);
             if (used.TryGetValue(touch.fingerId, out drag))
             {
-                //If it's used and has ended
-                if(touch.phase == TouchPhase.Ended || touch.phase == TouchPhase.Canceled)
+                //Try and get the CameraMovement component if it is a camera
+                CameraMovement cam = drag.GetComponent<CameraMovement>();
+
+                //If not in build phase and this is a draggable object
+                if(cam == null && !LevelState.cur.currentLevelState.Equals(LevelState.LevelStates.Build))
+                {
+                    //Get the new touch position
+                    Vector3 touchPos = Camera.main.ScreenToWorldPoint(new Vector3(touch.position.x, touch.position.y, 10));
+                    touchPos.y = touchPos.z;
+
+                    //End the touch
+                    drag.OnTouchDrag(touchPos);
+
+                }//If it's used and has ended
+                if (touch.phase == TouchPhase.Ended || touch.phase == TouchPhase.Canceled)
                 {
                     //Try and get the CameraMovement component
-                    CameraMovement cam = drag.GetComponent<CameraMovement>();
+                    
                     //If it exists, it is a camera
                     if(cam != null)
                     {
@@ -80,8 +93,7 @@ public class Touch_Handler : MonoBehaviour {
                     Vector3 touchPos = Camera.main.ScreenToWorldPoint(new Vector3(touch.position.x, touch.position.y, 10));
                     touchPos.y = touchPos.z;
 
-                    //Try and get the CameraMovement component
-                    CameraMovement cam = drag.GetComponent<CameraMovement>();
+                    
                     //If it exists, it isn't a camera
                     if (cam == null)
                     {
@@ -104,7 +116,7 @@ public class Touch_Handler : MonoBehaviour {
                     if (touch.phase == TouchPhase.Began || touch.phase == TouchPhase.Moved)
                     {
                         //See if it touched a draggable object
-                        if (hit.collider.CompareTag("Draggable"))
+                        if (hit.collider.CompareTag("Draggable") && LevelState.cur.currentLevelState.Equals(LevelState.LevelStates.Build))
                         {
                             //Get the touched objects Draggable component and make sure it isn't already being dragged
                             drag = hit.collider.GetComponent<Draggable>();

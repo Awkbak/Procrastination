@@ -21,15 +21,25 @@ public class ManagerMovement : MonoBehaviour {
     private Vector3 endPos;
 
     /// <summary>
+    /// Next node in an AStar sequence
+    /// </summary>
+    private Node nextNode;
+
+    /// <summary>
+    /// The next position in an AStar sequence
+    /// </summary>
+    private Vector3 nextPos;
+
+    /// <summary>
     /// Is this manager currently moving?
     /// </summary>
     [SerializeField]
     private bool moving = false;
 
     /// <summary>
-    /// Temporary variable to test movement
+    /// Used to make sure movement is setup only once
     /// </summary>
-    public bool moveTester = false;
+    private bool setUpMovement = true;
 
     /// <summary>
     /// This manager's movement speed in Units/Second
@@ -73,12 +83,46 @@ public class ManagerMovement : MonoBehaviour {
         
     }
 
-    void Update()
+    void FixedUpdate()
     {
-        if (moveTester)
+        if (LevelState.cur.currentLevelState.Equals(LevelState.LevelStates.Workday))
         {
-            moveTester = false;
-            startMoving();
+            if (setUpMovement)
+            {
+                
+                startMoving();
+            }
+            else
+            {
+                if (moving)
+                {
+                    print(rigidbody.velocity);
+                    Vector3 direction = transform.position - nextPos;
+                    direction.y = 0;
+                    if (direction.sqrMagnitude < 0.05f)
+                    {
+                        nextNode = nextNode.child;
+                        if (nextNode != null)
+                        {
+                            nextPos = nextNode.generateVector3();
+                        }
+                        else
+                        {
+                            print("Done");
+                            moving = false;
+                        }
+                    }
+                    //print(nextPos + " : " + direction);
+                    direction.Normalize();
+                    rigidbody.velocity = -direction * movementSpeed;
+
+                }
+                else {
+                    rigidbody.velocity = Vector3.zero;
+                    //setUpMovement = true;
+                }
+            }
+            
         }
     }
 
@@ -93,53 +137,22 @@ public class ManagerMovement : MonoBehaviour {
 
     public void startMoving()
     {
+        setUpMovement = false;
         moving = true;
         Vector3 startPosTrans = startPos;
         startPosTrans.z = startPos.y;
         startPos.y = 0.7f;
         transform.position = startPos;
 
-        StartCoroutine(move());
+        nextNode = AStar.solve();
+        nextPos = nextNode.generateVector3();
+
     }
 
     public void stopMoving()
     {
         moving = false;
     }
-
-    IEnumerator move()
-    {
-        Node nextNode = AStar.solve();
-        Vector3 nextPos = nextNode.generateVector3();
-        while (moving)
-        {
-            print(rigidbody.velocity);
-            Vector3 direction = transform.position - nextPos;
-            direction.y = 0;
-            if(direction.sqrMagnitude < 0.05f)
-            {
-                nextNode = nextNode.child;
-                if(nextNode != null)
-                {
-                    nextPos = nextNode.generateVector3();
-                }
-                else
-                {
-                    print("Done");
-                    moving = false;
-                    yield return null;
-                }
-            }
-            //print(nextPos + " : " + direction);
-            direction.Normalize();
-            rigidbody.velocity = -direction * movementSpeed;
-           
-            yield return null;
-        }
-        rigidbody.velocity = Vector3.zero;
-    }
-
-
 }
 
 
