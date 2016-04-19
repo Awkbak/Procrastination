@@ -116,7 +116,7 @@ public class Touch_Handler : MonoBehaviour {
                     if (touch.phase == TouchPhase.Began || touch.phase == TouchPhase.Moved)
                     {
                         //See if it touched a draggable object
-                        if (hit.collider.CompareTag("Draggable") && LevelState.cur.currentLevelState.Equals(LevelState.LevelStates.Build))
+                        if (hit.collider.tag.Contains("Draggable") && LevelState.cur.currentLevelState.Equals(LevelState.LevelStates.Build))
                         {
                             //Get the touched objects Draggable component and make sure it isn't already being dragged
                             drag = hit.collider.GetComponent<Draggable>();

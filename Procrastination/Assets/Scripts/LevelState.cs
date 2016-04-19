@@ -27,4 +27,20 @@ public class LevelState : MonoBehaviour {
     {
         currentLevelState = state;
     }
+
+    public void toggleState()
+    {
+        if (currentLevelState.Equals(LevelStates.Build))
+        {
+            currentLevelState = LevelStates.Workday;
+        }
+        else if (currentLevelState.Equals(LevelStates.Workday))
+        {
+            currentLevelState = LevelStates.Night;
+        }
+        else if (currentLevelState.Equals(LevelStates.Night))
+        {
+            currentLevelState = LevelStates.Build;
+        }
+    }
 }

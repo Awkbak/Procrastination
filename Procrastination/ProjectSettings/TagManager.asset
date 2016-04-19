@@ -8,6 +8,7 @@ TagManager:
   - Ground
   - ManagerStart
   - PlayerDesk
+  - DraggableWatercooler
   layers:
   - Default
   - TransparentFX

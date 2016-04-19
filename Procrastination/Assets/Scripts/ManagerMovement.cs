@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using System;
 
 public class ManagerMovement : MonoBehaviour {
 
@@ -9,6 +8,16 @@ public class ManagerMovement : MonoBehaviour {
     /// This objects Rigidbody
     /// </summary>
     private Rigidbody rigidbody;
+
+    /// <summary>
+    /// The possible manager states
+    /// </summary>
+    private enum ManagerStates {Idle, Going, Leaving, Distracted }
+
+    /// <summary>
+    /// The current manager state
+    /// </summary>
+    private ManagerStates state = ManagerStates.Idle;
 
     /// <summary>
     /// The manager's start position
@@ -45,6 +54,11 @@ public class ManagerMovement : MonoBehaviour {
     /// This manager's movement speed in Units/Second
     /// </summary>
     private float movementSpeed = 5.0f;
+
+    /// <summary>
+    /// A generic timer for timing things
+    /// </summary>
+    private float genericTimer1 = 0.0f;
 
 	// Use this for initialization
 	void Start () {
@@ -96,32 +110,51 @@ public class ManagerMovement : MonoBehaviour {
             {
                 if (moving)
                 {
-                    print(rigidbody.velocity);
-                    Vector3 direction = transform.position - nextPos;
-                    direction.y = 0;
-                    if (direction.sqrMagnitude < 0.05f)
+                    if (state.Equals(ManagerStates.Going))
                     {
-                        nextNode = nextNode.child;
-                        if (nextNode != null)
+                        Vector3 direction = transform.position - nextPos;
+                        direction.y = 0;
+                        if (direction.sqrMagnitude < 0.05f)
                         {
-                            nextPos = nextNode.generateVector3();
+                            nextNode = nextNode.child;
+                            if (nextNode != null)
+                            {
+                                nextPos = nextNode.generateVector3();
+                            }
+                            else
+                            {
+                                print("Done");
+                                moving = false;
+                                state = ManagerStates.Idle;
+                            }
                         }
-                        else
+                        //print(nextPos + " : " + direction);
+                        direction.Normalize();
+                        rigidbody.velocity = -direction * movementSpeed;
+                    }
+                    else if (state.Equals(ManagerStates.Distracted))
+                    {
+                        rigidbody.velocity = Vector3.zero;
+                        genericTimer1 -= Time.fixedDeltaTime;
+                        if(genericTimer1 <= 0)
                         {
-                            print("Done");
-                            moving = false;
+                            state = ManagerStates.Going;
                         }
                     }
-                    //print(nextPos + " : " + direction);
-                    direction.Normalize();
-                    rigidbody.velocity = -direction * movementSpeed;
-
                 }
                 else {
                     rigidbody.velocity = Vector3.zero;
                     //setUpMovement = true;
                 }
             }
+            
+        }
+        else if (LevelState.cur.currentLevelState.Equals(LevelState.LevelStates.Build))
+        {
+            state = ManagerStates.Idle;
+        }
+        else if (LevelState.cur.currentLevelState.Equals(LevelState.LevelStates.Night))
+        {
             
         }
     }
@@ -139,6 +172,7 @@ public class ManagerMovement : MonoBehaviour {
     {
         setUpMovement = false;
         moving = true;
+        state = ManagerStates.Going;
         Vector3 startPosTrans = startPos;
         startPosTrans.z = startPos.y;
         startPos.y = 0.7f;
@@ -152,6 +186,17 @@ public class ManagerMovement : MonoBehaviour {
     public void stopMoving()
     {
         moving = false;
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        print("Triggered");
+        if (other.tag.Contains("Watercooler"))
+        {
+            print("Cooler");
+            genericTimer1 = Random.Range(1.0f, 2.0f);
+            state = ManagerStates.Distracted;
+        }
     }
 }
 
