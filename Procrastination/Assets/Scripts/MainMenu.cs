@@ -4,6 +4,16 @@ using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour {
 
+    void Start()
+    {
+
+        //Orientation is only on mobile
+        #if UNITY_ANDROID || UNITY_IPHONE
+        //Make sure we are in landscape mode
+        Screen.orientation = ScreenOrientation.LandscapeLeft;
+        #endif
+    }
+
     /// <summary>
     /// Starts the game
     /// </summary>

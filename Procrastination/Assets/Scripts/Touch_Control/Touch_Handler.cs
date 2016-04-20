@@ -27,8 +27,6 @@ public class Touch_Handler : MonoBehaviour {
 
     void Awake()
     {
-        //Make sure we are in landscape mode
-        Screen.orientation = ScreenOrientation.LandscapeLeft;
 
         //Fetch the current event system
         eventSystem = EventSystem.current;

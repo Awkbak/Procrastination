@@ -9,6 +9,7 @@ TagManager:
   - ManagerStart
   - PlayerDesk
   - DraggableWatercooler
+  - DraggableMinion
   layers:
   - Default
   - TransparentFX
