@@ -1,0 +1,21 @@
+{
+  name
+  currency
+  bosslevel
+  officesize
+  inventory
+  {
+    item1{params}
+    item2{params}
+    item3{params}
+  }
+  month
+  day
+  year
+  workers
+  {
+    worker1{params}
+    worker2{params}
+  }
+  whatever other information needed
+}
