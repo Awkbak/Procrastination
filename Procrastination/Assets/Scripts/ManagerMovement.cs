@@ -197,6 +197,13 @@ public class ManagerMovement : MonoBehaviour {
             genericTimer1 = Random.Range(1.0f, 2.0f);
             state = ManagerStates.Distracted;
         }
+        else if (other.tag.Contains("Minion"))
+        {
+            print("Cooler");
+            //If procrastinating, then wait longer than if productive
+            genericTimer1 = Random.Range(1.0f, 2.0f);
+            state = ManagerStates.Distracted;
+        }
     }
 }
 
