@@ -146,6 +146,12 @@ public class Touch_Handler : MonoBehaviour {
                             cam.OnTouchDrag(touchPos);
                             used.Add(touch.fingerId, drag);
                         }
+                        else if (hit.collider.CompareTag("Door"))
+                        {
+                            Door door = hit.collider.GetComponent<Door>();
+
+
+                        }
                         
 
                     }

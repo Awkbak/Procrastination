@@ -6,6 +6,11 @@ using System;
 public class Inventory : MonoBehaviour{
 
     /// <summary>
+    /// A static reference to this inventory
+    /// </summary>
+    public static Inventory inv;
+
+    /// <summary>
     /// How much money do you have
     /// </summary>
     public int money = 2;
@@ -14,6 +19,11 @@ public class Inventory : MonoBehaviour{
     /// List of objects the user can spawn
     /// </summary>
     public GameObject[] prefabs;
+
+    void Awake()
+    {
+        inv = this;
+    }
 
     /// <summary>
     /// Retreives how much money is available
@@ -31,7 +41,7 @@ public class Inventory : MonoBehaviour{
     /// <returns>Whether or not "amout" was valid (more than you currently own)</returns>
     public bool subtractMoney(int amount)
     {
-        if(amount > money)
+        if(amount >= money)
         {
             return false;
         }
