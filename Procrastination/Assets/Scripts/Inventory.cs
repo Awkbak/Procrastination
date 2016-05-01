@@ -34,6 +34,11 @@ public class Inventory : MonoBehaviour{
         return money;
     }
 
+    public void addMoney(int money)
+    {
+        this.money += money;
+    }
+
     /// <summary>
     /// Subtracts a designated amount of money from you
     /// </summary>
@@ -129,6 +134,26 @@ public class Inventory : MonoBehaviour{
         else
         {
             print("No Monies");
+        }
+    }
+
+
+    public GameObject makeItem(string itemName)
+    {
+        switch (itemName)
+        {
+            case "LONG_WITH_CHAIR":
+                return Instantiate(prefabs[0], transform.position, Quaternion.identity) as GameObject;
+            case "LONG":
+                return Instantiate(prefabs[1], transform.position, Quaternion.identity) as GameObject;
+            case "SMALL_WITH_CHAIR":
+                return Instantiate(prefabs[2], transform.position, Quaternion.identity) as GameObject;
+            case "SMALL":
+                return Instantiate(prefabs[3], transform.position, Quaternion.identity) as GameObject;
+            case "WATERCOOLER":
+                return Instantiate(prefabs[4], transform.position, Quaternion.identity) as GameObject;
+            default:
+                return Instantiate(prefabs[0], transform.position, Quaternion.identity) as GameObject;
         }
     }
 

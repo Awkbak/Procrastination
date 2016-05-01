@@ -97,24 +97,24 @@ public class SelectedItemCanvas : MonoBehaviour {
         }
     }
 
-    public void sell()
+    public void buy()
     {
         if (Inventory.inv.getMoney() >= price)
         {
-            if (sellCallback != null)
+            if (buyCallback != null)
             {
-                sellCallback();
+                buyCallback();
             }
             clearCallback();
             deselect();
         }
     }
 
-    public void buy()
+    public void sell()
     {
-        if (buyCallback != null)
+        if (sellCallback != null)
         {
-            buyCallback();
+            sellCallback();
         }
         clearCallback();
         deselect();
