@@ -116,6 +116,7 @@ public class SaveGame : MonoBehaviour {
         do
         {
             word = k.getNextWord();
+            print("G" + word + "G");
             switch (word)
             {
                 case "NAME":
@@ -145,6 +146,9 @@ public class SaveGame : MonoBehaviour {
                 case "WORKERS":
                     loadWorkers(k);
                     break;
+                default:
+                    print("Error Parsing Save File: Unexpected Keyword '" + @word + "'");
+                    return;
             }
 
         } while (k.hasNext());
@@ -229,105 +233,117 @@ public class SaveGame : MonoBehaviour {
 
 class Scanner : System.IO.StringReader
 {
-    string currentWord;
+    char[] separators = { ' ', '\n', '\t' };
+    
+    string[] wordList;
+    int curWord;
 
     public Scanner(string source) : base(source)
     {
-        nextWord();
-    }
 
-    private void nextWord()
-    {
-        System.Text.StringBuilder sb = new System.Text.StringBuilder();
-        char nextChar;
-        int next;
-        do
-        {
-            next = this.Read();
-            if (next < 0)
-                break;
-            nextChar = (char)next;
-            if (char.IsWhiteSpace(nextChar))
-                break;
-            sb.Append(nextChar);
-        } while (true);
-        while ((this.Peek() >= 0) && (char.IsWhiteSpace((char)this.Peek())))
-            this.Read();
-        if (sb.Length > 0)
-            currentWord = sb.ToString();
-        else
-            currentWord = null;
+        wordList = source.Split(separators);
+        curWord = 0;
     }
 
     public string getNextWord()
     {
-        string word = currentWord;
-        nextWord();
-        return word;
+        //string word = currentWord;
+        //nextWord();
+
+        ++curWord;
+        if(curWord > wordList.Length)
+        {
+            return "";
+        }
+        else
+        {
+            wordList[curWord - 1] = wordList[curWord - 1].Trim();
+            return wordList[curWord - 1];
+        }
+        
     }
 
-    public bool hasNextInt()
+    /*public bool hasNextInt()
     {
         if (currentWord == null)
             return false;
         int dummy;
         return int.TryParse(currentWord, out dummy);
-    }
+    }*/
 
     public int nextInt()
     {
+        ++curWord;
+        if(curWord > wordList.Length)
+        {
+            return int.MinValue;
+        }
         try
         {
-            return int.Parse(currentWord);
+            wordList[curWord - 1] = wordList[curWord - 1].Trim();
+            return int.Parse(wordList[curWord - 1]);
         }
-        finally
+        catch
         {
-            nextWord();
+            return int.MinValue;
         }
+
     }
 
-    public bool hasNextDouble()
+    /*public bool hasNextDouble()
     {
         if (currentWord == null)
             return false;
         double dummy;
         return double.TryParse(currentWord, out dummy);
-    }
+    }*/
 
     public double nextDouble()
     {
+        ++curWord;
+        if (curWord > wordList.Length)
+        {
+            return double.MinValue;
+        }
         try
         {
-            return double.Parse(currentWord);
+            wordList[curWord - 1] = wordList[curWord - 1].Trim();
+            return double.Parse(wordList[curWord - 1]);
         }
-        finally
+        catch
         {
-            nextWord();
+            return int.MinValue;
         }
     }
 
-    public bool hasNextFloat()
+    /*public bool hasNextFloat()
     {
         if (currentWord == null)
             return false;
         float dummy;
         return float.TryParse(currentWord, out dummy);
-    }
+    }*/
 
     public float nextFloat()
     {
+        ++curWord;
+        if (curWord > wordList.Length)
+        {
+            return float.MinValue;
+        }
         try
         {
-            return float.Parse(currentWord);
+            wordList[curWord - 1] = wordList[curWord - 1].Trim();
+            return float.Parse(wordList[curWord - 1]);
         }
-        finally
+        catch
         {
-            nextWord();
+            return float.MinValue;
         }
     }
 
     public bool hasNext()
     {
-        return currentWord != null;
+        return (curWord < wordList.Length);
     }
 }
