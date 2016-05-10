@@ -108,7 +108,7 @@ public class Touch_Handler : MonoBehaviour {
             {
                 //Get a ray based on touch position sand see what it hits
                 Ray ray = Camera.main.ScreenPointToRay(touch.position);
-                if (Physics.Raycast(ray, out hit, 10.1f))
+                if (Physics.Raycast(ray, out hit, 15.1f))
                 {
                     //If the touch is moving/beginning
                     if (touch.phase == TouchPhase.Began || touch.phase == TouchPhase.Moved)
