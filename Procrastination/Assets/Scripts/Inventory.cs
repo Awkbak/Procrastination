@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine.EventSystems;
 using System;
+using UnityEngine.UI;
 
 public class Inventory : MonoBehaviour{
 
@@ -20,9 +21,29 @@ public class Inventory : MonoBehaviour{
     /// </summary>
     public GameObject[] prefabs;
 
+    /// <summary>
+    /// The Text component displaying the current money
+    /// </summary>
+    [SerializeField]
+    private Text moneyText;
+
+    /// <summary>
+    /// The Text component displaying the current hourly rate
+    /// </summary>
+    [SerializeField]
+    private Text hourlyRateText;
+
+    /// <summary>
+    /// Money Generated per hour
+    /// </summary>
+    private int hourlyRate = 1;
+
+
     void Awake()
     {
         inv = this;
+        updateMoneyUI();
+        updateRateUI();
     }
 
     /// <summary>
@@ -37,11 +58,41 @@ public class Inventory : MonoBehaviour{
     public void setMoney(int money)
     {
         this.money = money;
+        updateMoneyUI();
     }
 
     public void addMoney(int money)
     {
         this.money += money;
+        updateMoneyUI();
+    }
+
+    public void increasePay(int rate)
+    {
+        hourlyRate += rate;
+        updateRateUI();
+    }
+
+    public void decreasePay(int rate)
+    {
+        hourlyRate -= rate;
+        updateRateUI();
+    }
+
+    public void payDay()
+    {
+        money += hourlyRate;
+        updateMoneyUI();
+    }
+
+    private void updateMoneyUI()
+    {
+        moneyText.text = "Total: $" + money;
+    }
+
+    private void updateRateUI()
+    {
+        hourlyRateText.text = "Hourly: $" + hourlyRate;
     }
 
     /// <summary>
@@ -58,6 +109,7 @@ public class Inventory : MonoBehaviour{
         else
         {
             money -= amount;
+            updateMoneyUI();
             return true;
         }
     }

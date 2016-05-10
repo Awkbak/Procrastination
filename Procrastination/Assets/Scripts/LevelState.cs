@@ -37,6 +37,11 @@ public class LevelState : MonoBehaviour {
     private int bossLevel = 1;
 
     /// <summary>
+    /// The current hour
+    /// </summary>
+    private int currentHour = 0;
+
+    /// <summary>
     /// A general timer for timing
     /// </summary>
     private float generalTimer1 = 0.0f;
@@ -75,7 +80,11 @@ public class LevelState : MonoBehaviour {
                 curTimeText.text = (hour + 8) + ":" + (minutes < 10 ? "0" : "") + minutes + (hour == 4 ? " pm" : " am");
             }
 
-            
+            if(currentHour != hour)
+            {
+                Inventory.inv.payDay();
+                currentHour = hour;
+            }
 
             if(generalTimer1 > generalTimer2 && currentLevelState.Equals(LevelStates.Workday))
             {
@@ -102,6 +111,7 @@ public class LevelState : MonoBehaviour {
         {
             currentLevelState = LevelStates.Workday;
             timeOfDayText.text = "Workday";
+            currentHour = 0;
             generalTimer1 = 0;
             generalTimer2 = (0.15f * bossLevel * 15.0f) + 15.0f;
         }
