@@ -20,11 +20,6 @@ public class SaveGame : MonoBehaviour {
         saveGame(@"playersave2.dat");
 	}
 
-	// Update is called once per frame
-	void Update () {
-
-	}
-
     /// <summary>
     /// Saves the current game state
     /// </summary>
@@ -247,8 +242,6 @@ class Scanner : System.IO.StringReader
 
     public string getNextWord()
     {
-        //string word = currentWord;
-        //nextWord();
 
         ++curWord;
         if(curWord > wordList.Length)
@@ -262,14 +255,6 @@ class Scanner : System.IO.StringReader
         }
         
     }
-
-    /*public bool hasNextInt()
-    {
-        if (currentWord == null)
-            return false;
-        int dummy;
-        return int.TryParse(currentWord, out dummy);
-    }*/
 
     public int nextInt()
     {
@@ -290,14 +275,6 @@ class Scanner : System.IO.StringReader
 
     }
 
-    /*public bool hasNextDouble()
-    {
-        if (currentWord == null)
-            return false;
-        double dummy;
-        return double.TryParse(currentWord, out dummy);
-    }*/
-
     public double nextDouble()
     {
         ++curWord;
@@ -315,14 +292,6 @@ class Scanner : System.IO.StringReader
             return int.MinValue;
         }
     }
-
-    /*public bool hasNextFloat()
-    {
-        if (currentWord == null)
-            return false;
-        float dummy;
-        return float.TryParse(currentWord, out dummy);
-    }*/
 
     public float nextFloat()
     {

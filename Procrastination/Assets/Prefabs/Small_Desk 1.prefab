@@ -167,7 +167,7 @@ GameObject:
   - 65: {fileID: 6560938}
   - 114: {fileID: 11448992}
   m_Layer: 0
-  m_Name: Small_Desk
+  m_Name: Small_Desk 1
   m_TagString: Draggable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

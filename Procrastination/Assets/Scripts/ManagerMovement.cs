@@ -50,6 +50,8 @@ public class ManagerMovement : MonoBehaviour {
     /// </summary>
     private bool setUpMovement = true;
 
+    private bool setUpLeaving = true;
+
     /// <summary>
     /// This manager's movement speed in Units/Second
     /// </summary>
@@ -103,60 +105,103 @@ public class ManagerMovement : MonoBehaviour {
         {
             if (setUpMovement)
             {
-                
+
                 startMoving();
             }
             else
             {
-                if (moving)
+
+                if (state.Equals(ManagerStates.Going))
                 {
-                    if (state.Equals(ManagerStates.Going))
+                    Vector3 direction = transform.position - nextPos;
+                    direction.y = 0;
+                    if (direction.sqrMagnitude < 0.05f)
                     {
-                        Vector3 direction = transform.position - nextPos;
-                        direction.y = 0;
-                        if (direction.sqrMagnitude < 0.05f)
+
+                        if (nextNode.child != null)
                         {
                             nextNode = nextNode.child;
-                            if (nextNode != null)
-                            {
-                                nextPos = nextNode.generateVector3();
-                            }
-                            else
-                            {
-                                print("Done");
-                                moving = false;
-                                state = ManagerStates.Idle;
-                            }
+                            nextPos = nextNode.generateVector3();
                         }
-                        //print(nextPos + " : " + direction);
-                        direction.Normalize();
-                        rigidbody.velocity = -direction * movementSpeed;
-                    }
-                    else if (state.Equals(ManagerStates.Distracted))
-                    {
-                        rigidbody.velocity = Vector3.zero;
-                        genericTimer1 -= Time.fixedDeltaTime;
-                        if(genericTimer1 <= 0)
+                        else
                         {
-                            state = ManagerStates.Going;
+                            print("Done");
+                            stopMoving();
                         }
+                    }
+                    //print(nextPos + " : " + direction);
+                    direction.Normalize();
+                    rigidbody.velocity = -direction * movementSpeed;
+                }
+                else if (state.Equals(ManagerStates.Distracted))
+                {
+                    rigidbody.velocity = Vector3.zero;
+                    genericTimer1 -= Time.fixedDeltaTime;
+                    if (genericTimer1 <= 0)
+                    {
+                        state = ManagerStates.Going;
                     }
                 }
-                else {
+                else
+                {
                     rigidbody.velocity = Vector3.zero;
-                    //setUpMovement = true;
                 }
             }
-            
+
+
         }
         else if (LevelState.cur.currentLevelState.Equals(LevelState.LevelStates.Build))
         {
-            state = ManagerStates.Idle;
+            stopMoving();
         }
         else if (LevelState.cur.currentLevelState.Equals(LevelState.LevelStates.Night))
         {
-            
+            if (setUpLeaving)
+            {
+                state = ManagerStates.Leaving;
+                setUpLeaving = false;
+            }
+            else {
+                if (state.Equals(ManagerStates.Leaving))
+                {
+                    Vector3 direction = transform.position - nextPos;
+                    direction.y = 0;
+                    if (direction.sqrMagnitude < 0.05f)
+                    {
+
+                        if (nextNode.parent != null)
+                        {
+                            nextNode = nextNode.parent;
+                            nextPos = nextNode.generateVector3();
+                        }
+                        else
+                        {
+                            print("Done");
+                            stopMoving();
+                            finishLevel();
+                        }
+                    }
+                    //print(nextPos + " : " + direction);
+                    direction.Normalize();
+                    rigidbody.velocity = -direction * movementSpeed;
+                }
+                else if (state.Equals(ManagerStates.Distracted))
+                {
+                    rigidbody.velocity = Vector3.zero;
+                    genericTimer1 -= Time.fixedDeltaTime;
+                    if (genericTimer1 <= 0)
+                    {
+                        state = ManagerStates.Going;
+                    }
+                }
+                else
+                {
+                    rigidbody.velocity = Vector3.zero;
+                }
+            }
+
         }
+        
     }
 
     public bool recalculate()
@@ -186,6 +231,20 @@ public class ManagerMovement : MonoBehaviour {
     public void stopMoving()
     {
         moving = false;
+        state = ManagerStates.Idle;
+        rigidbody.velocity = Vector3.zero;
+
+    }
+
+    /// <summary>
+    /// Called when the manager leaves for the night
+    /// </summary>
+    private void finishLevel()
+    {
+        state = ManagerStates.Idle;
+        setUpMovement = true;
+        setUpLeaving = true;
+        LevelState.cur.toggleState();
     }
 
     void OnTriggerEnter(Collider other)
