@@ -97,7 +97,7 @@ public class Inventory : MonoBehaviour{
     public bool penalty(float percent, int level)
     {
 
-        return loseMoney((int)(50 * (1 / percent) * level));
+        return loseMoney((int)(50 * (1 / percent) * (level * 1.2)));
 
     }
 

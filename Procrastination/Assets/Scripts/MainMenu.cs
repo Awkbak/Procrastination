@@ -17,7 +17,7 @@ public class MainMenu : MonoBehaviour {
         #if UNITY_ANDROID || UNITY_IPHONE
         //Make sure we are in landscape mode
         Screen.orientation = ScreenOrientation.LandscapeLeft;
-#endif
+        #endif
 
         Random.seed = (int) System.DateTime.Now.Ticks;
     }
@@ -43,13 +43,13 @@ public class MainMenu : MonoBehaviour {
     public void loadGame()
     {
         SaveGame.save.setIsLoadingGame(true);
-        SceneManager.LoadScene("Floor1");
+        SceneManager.LoadScene(1);
     }
 
     public void newGame()
     {
         SaveGame.save.setIsLoadingGame(false);
-        SceneManager.LoadScene("Floor1");
+        SceneManager.LoadScene(1);
     }
 
     public void exitGame()

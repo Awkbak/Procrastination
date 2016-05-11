@@ -58,7 +58,7 @@ public class LevelState : MonoBehaviour {
     /// <summary>
     /// The current game's boss level
     /// </summary>
-    private int bossLevel = 1;
+    public static int bossLevel = 1;
 
     /// <summary>
     /// The current hour
@@ -145,7 +145,7 @@ public class LevelState : MonoBehaviour {
 
     public void setBossLevel(int bossLevel)
     {
-        this.bossLevel = bossLevel;
+        LevelState.bossLevel = bossLevel;
     }
 
     public int getBossLevel()
@@ -211,11 +211,20 @@ public class LevelState : MonoBehaviour {
         {
             //Lost the game
             messagesScript.firedMessage();
+            StartCoroutine(fired());
         }
         else
         {
             messagesScript.displayMessage();
         }
         
+    }
+
+    IEnumerator fired()
+    {
+
+        yield return new WaitForSeconds(2.0f);
+
+        SceneManager.LoadScene(2);
     }
 }

@@ -9,3 +9,5 @@ EditorBuildSettings:
     path: Assets/Levels/MainMenu2.unity
   - enabled: 1
     path: Assets/Levels/Floor1.unity
+  - enabled: 1
+    path: Assets/Levels/GameOverScene.unity

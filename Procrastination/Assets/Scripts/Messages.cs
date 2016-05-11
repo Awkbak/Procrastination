@@ -21,7 +21,7 @@ public class Messages : MonoBehaviour {
 
         messageText.text = "";
         background.SetActive(false);
-        messageText.gameObject.SetActive(false);
+        messageText.enabled = false;
     }
 
 	public void displayMessage()
@@ -32,14 +32,14 @@ public class Messages : MonoBehaviour {
     public void firedMessage()
     {
         background.SetActive(true);
-        messageText.gameObject.SetActive(true);
+        messageText.enabled = true;
         messageText.text = "YOUR FIRED!!!";
     }
 
     IEnumerator message()
     {
         background.SetActive(true);
-        messageText.gameObject.SetActive(true);
+        messageText.enabled = true;
         int choice = Random.Range(0, messages.Length);
 
         messageText.text = messages[choice];
@@ -48,7 +48,7 @@ public class Messages : MonoBehaviour {
 
         messageText.text = "";
         background.SetActive(false);
-        messageText.gameObject.SetActive(false);
+        messageText.enabled = false;
 
     }
 }
