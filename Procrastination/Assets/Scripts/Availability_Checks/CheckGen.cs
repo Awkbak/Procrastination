@@ -99,12 +99,14 @@ public class CheckGen : MonoBehaviour {
         {
             //Create a ray at the panel and send it down
             RaycastHit hit = new RaycastHit();
+                
             Ray ray = new Ray(panels[e].transform.position, new Vector3(0, -1, 0));
+
             //If something is hit
-            if(Physics.Raycast(ray, out hit, 1.5f))
+            if (Physics.Raycast(ray, out hit, 1.5f))
             {
                 //If the ground is hit, there are no obstructions
-                if (!hit.collider.CompareTag("Ground"))
+                if (!hit.collider.CompareTag("Ground") || (hit.collider.name.Equals("Floor1") && hit.point.y > 0.1f))
                 {
                     allGood = false;
                     panelMats[e].material = matBad;

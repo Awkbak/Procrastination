@@ -172,6 +172,7 @@ public class Inventory : MonoBehaviour{
     /// <param name="data">Pointer data sent by Unity</param>
     public void spawnSmallWithChair(BaseEventData data)
     {
+        print("Spawn 1");
         spawnGeneric(data, 2, 25);
     }
 
@@ -197,6 +198,7 @@ public class Inventory : MonoBehaviour{
     /// <param name="price">Price to spawn this item</param>
     public void spawnGeneric(BaseEventData data, int prefabIndex, int price)
     {
+        print("Spawn 2");
         //Make sure you have enough money
         if (subtractMoney(price))
         {

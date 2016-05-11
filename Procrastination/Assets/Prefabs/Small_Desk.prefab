@@ -45,7 +45,7 @@ GameObject:
   - 65: {fileID: 6570730}
   - 114: {fileID: 11440736}
   m_Layer: 0
-  m_Name: Small_Desk
+  m_Name: Small_Desk_With_Chair
   m_TagString: Draggable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1730,8 +1730,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 3.2, y: 0.1, z: 2.2}
-  m_Center: {x: 1.5, y: 0.15, z: -0.8}
+  m_Size: {x: 3.8, y: 0.1, z: 2.8}
+  m_Center: {x: 1.5, y: 0.15, z: -1}
 --- !u!95 &9546072
 Animator:
   serializedVersion: 3

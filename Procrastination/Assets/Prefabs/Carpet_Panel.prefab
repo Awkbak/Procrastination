@@ -13,7 +13,7 @@ GameObject:
   - 23: {fileID: 2377396}
   m_Layer: 2
   m_Name: Carpet_Panel
-  m_TagString: Ground
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

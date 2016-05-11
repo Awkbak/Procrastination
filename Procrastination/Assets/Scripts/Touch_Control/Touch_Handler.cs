@@ -8,7 +8,7 @@ public class Touch_Handler : MonoBehaviour {
 
 
     //Touches only exist on mobile
-   // #if UNITY_ANDROID || UNITY_IPHONE
+    #if UNITY_ANDROID || UNITY_IPHONE
 
     /// <summary>
     /// Reference to script that handles touches
@@ -216,5 +216,5 @@ public class Touch_Handler : MonoBehaviour {
         //If no hit, then return an empty string
         return "";
     }
-   // #endif
+    #endif
 }
