@@ -79,6 +79,16 @@ public class Inventory : MonoBehaviour{
         updateRateUI();
     }
 
+    public void setPay(int pay)
+    {
+        hourlyRate = pay;
+    }
+
+    public int getPay()
+    {
+        return hourlyRate;
+    }
+
     public void payDay()
     {
         money += hourlyRate;
@@ -141,7 +151,7 @@ public class Inventory : MonoBehaviour{
     /// <param name="data">Pointer data sent by Unity</param>
     public void spawnLongWithChair(BaseEventData data)
     {
-        spawnGeneric(data, 0, 1);
+        spawnGeneric(data, 0, 50);
     }
 
     /// <summary>
@@ -150,7 +160,7 @@ public class Inventory : MonoBehaviour{
     /// <param name="data">Pointer data sent by Unity</param>
     public void spawnLong(BaseEventData data)
     {
-        spawnGeneric(data, 1, 1);
+        spawnGeneric(data, 1, 50);
     }
 
     /// <summary>
@@ -159,7 +169,7 @@ public class Inventory : MonoBehaviour{
     /// <param name="data">Pointer data sent by Unity</param>
     public void spawnSmallWithChair(BaseEventData data)
     {
-        spawnGeneric(data, 2, 1);
+        spawnGeneric(data, 2, 25);
     }
 
     /// <summary>
@@ -168,7 +178,12 @@ public class Inventory : MonoBehaviour{
     /// <param name="data">Pointer data sent by Unity</param>
     public void spawnSmall(BaseEventData data)
     {
-        spawnGeneric(data, 3, 1);
+        spawnGeneric(data, 3, 25);
+    }
+
+    public void spawnWatercooler(BaseEventData data)
+    {
+        spawnGeneric(data, 4, 50);
     }
 
     /// <summary>
@@ -230,6 +245,8 @@ public class Inventory : MonoBehaviour{
                 return Instantiate(prefabs[3], transform.position, Quaternion.identity) as GameObject;
             case "WATERCOOLER":
                 return Instantiate(prefabs[4], transform.position, Quaternion.identity) as GameObject;
+            case "DOOR":
+                return Instantiate(prefabs[5], transform.position, Quaternion.identity) as GameObject;
             default:
                 return Instantiate(prefabs[0], transform.position, Quaternion.identity) as GameObject;
         }

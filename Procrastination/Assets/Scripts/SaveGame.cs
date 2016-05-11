@@ -7,32 +7,77 @@ public class SaveGame : MonoBehaviour {
 
     //https://msdn.microsoft.com/en-us/library/8bh11f1k.aspx
 
+    public static SaveGame save;
+
     private string name = "";
-    private int bossLevel = 1;
-    private int month = 5;
-    private int day = 4;
-    private int year = 2016;
+
+    private bool isLoadingGame = false;
+
+    void Awake()
+    {
+        if (save == null)
+        {
+            save = this;
+            DontDestroyOnLoad(this.gameObject);
+        }
+        else {
+            Destroy(this.gameObject);
+        }
+    }
 
     // Use this for initialization
     void Start () {
         //getShop("playersave.dat");
-        loadGame(@"playersave.dat");
-        saveGame(@"playersave2.dat");
+        //loadGame(@"playersave.dat");
+        //saveGame(@"playersave.dat");
 	}
+
+    void OnLevelWasLoaded(int level)
+    {
+        if(level == 1)
+        {
+            if (isLoadingGame)
+            {
+
+                Door[] doors = GameObject.FindObjectsOfType<Door>();
+                foreach (Door obj in doors)
+                {
+                    Destroy(obj.gameObject);
+                }
+                loadGame();
+                isLoadingGame = false;
+            }
+        }
+    }
+
+    /// <summary>
+    /// Returns if a save file exists
+    /// </summary>
+    /// <returns></returns>
+    public bool saveExists(string fileName = @"playersave.dat")
+    {
+        return File.Exists(@"playersave.dat");
+    }
+
+    public void setIsLoadingGame(bool value)
+    {
+        isLoadingGame = value;
+    }
 
     /// <summary>
     /// Saves the current game state
     /// </summary>
-    public void saveGame(string fileName)
+    public void saveGame(string fileName = @"playersave.dat")
     {
         StringBuilder save = new StringBuilder("NAME ");
         save.Append(name + '\n');
         save.Append("MONEY ");
         save.Append(Inventory.inv.getMoney());
+        save.Append("\nPAY ");
+        save.Append(Inventory.inv.getPay());
         save.Append("\nBOSSLEVEL ");
-        save.Append(bossLevel);
-        save.Append("\nDATE ");
-        save.Append(month + " " + day + " " + year + '\n');
+        save.Append(LevelState.cur.getBossLevel());
+        save.Append('\n');
         saveInventory(save);
         saveWorkers(save);
         System.IO.File.WriteAllText(@fileName, save.ToString());
@@ -78,7 +123,14 @@ public class SaveGame : MonoBehaviour {
             }
         }
 
-        save.Append("END_INVENTORY\n");
+        Door[] doors = GameObject.FindObjectsOfType<Door>();
+        foreach (Door obj in doors)
+        {
+            save.Append("DOOR");
+            save.Append(" " + obj.transform.position.x + ' ' + obj.transform.position.y + ' ' + obj.transform.position.z + ' ' + obj.transform.rotation.eulerAngles.y + '\n');
+        }
+
+            save.Append("END_INVENTORY\n");
     }
 
     /// <summary>
@@ -94,7 +146,7 @@ public class SaveGame : MonoBehaviour {
     /// <summary>
     /// Loads a saved game
     /// </summary>
-    public void loadGame(string fileName)
+    public void loadGame(string fileName = @"playersave.dat")
     {
         Scanner k;
         try {
@@ -115,25 +167,16 @@ public class SaveGame : MonoBehaviour {
             switch (word)
             {
                 case "NAME":
-                    string name = k.getNextWord();
-                    this.name = name;
+                    this.name = k.getNextWord();
                     break;
                 case "MONEY":
-                    int money = k.nextInt();
-                    Inventory.inv.setMoney(money);
+                    Inventory.inv.setMoney(k.nextInt());
+                    break;
+                case "PAY":
+                    Inventory.inv.setPay(k.nextInt());
                     break;
                 case "BOSSLEVEL":
-                    int bossLevel = k.nextInt();
-                    this.bossLevel = bossLevel;
-                    break;
-                case "DATE":
-                    int month = k.nextInt();
-                    int day = k.nextInt();
-                    int year = k.nextInt();
-
-                    this.month = month;
-                    this.day = day;
-                    this.year = year;
+                    LevelState.cur.setBossLevel(k.nextInt());
                     break;
                 case "INVENTORY":
                     loadInventory(k);
@@ -164,7 +207,15 @@ public class SaveGame : MonoBehaviour {
 
             GameObject item = Inventory.inv.makeItem(itemName);
             item.transform.position = itemPosition;
-            item.transform.rotation = Quaternion.Euler(0, itemRotation, 0);
+            if (itemName.Equals("DOOR"))
+            {
+                item.transform.rotation = Quaternion.Euler(270, itemRotation, 0);
+            }
+            else
+            {
+                item.transform.rotation = Quaternion.Euler(0, itemRotation, 0);
+            }
+            
 
             word = k.getNextWord();
         }

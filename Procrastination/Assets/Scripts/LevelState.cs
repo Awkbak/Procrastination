@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class LevelState : MonoBehaviour {
 
@@ -20,6 +21,12 @@ public class LevelState : MonoBehaviour {
     public LevelStates currentLevelState = LevelStates.Build;
 
     /// <summary>
+    /// Corresponds to the current day UI Text
+    /// </summary>
+    [SerializeField]
+    private Text currentDayText;
+
+    /// <summary>
     /// Corresponds to the time of day UI Text
     /// </summary>
     [SerializeField]
@@ -30,6 +37,12 @@ public class LevelState : MonoBehaviour {
     /// </summary>
     [SerializeField]
     private Text curTimeText;
+
+    /// <summary>
+    /// Corresponds to the UI items only available during the build phase
+    /// </summary>
+    [SerializeField]
+    private GameObject buildPhaseOnlyUIItems;
 
     /// <summary>
     /// Can you make money?
@@ -61,6 +74,7 @@ public class LevelState : MonoBehaviour {
         cur = this;
         timeOfDayText.text = "Early Morning";
         curTimeText.text = "7:59 am";
+        currentDayText.text = "Day " + bossLevel;
 	}
 
     void Start()
@@ -70,6 +84,13 @@ public class LevelState : MonoBehaviour {
 
     public void FixedUpdate()
     {
+        #if UNITY_ANDROID
+        if (Input.GetKey(KeyCode.Escape))
+        {
+            exitGame();
+        }
+        #endif
+
         if (currentLevelState.Equals(LevelStates.Workday) || currentLevelState.Equals(LevelStates.Night))
         {
             generalTimer1 += Time.fixedDeltaTime;
@@ -105,6 +126,26 @@ public class LevelState : MonoBehaviour {
             }
         }
     }
+
+    public void saveGame()
+    {
+        SaveGame.save.saveGame();
+    }
+
+    public void exitGame()
+    {
+        SceneManager.LoadScene(0);
+    }
+
+    public void setBossLevel(int bossLevel)
+    {
+        this.bossLevel = bossLevel;
+    }
+
+    public int getBossLevel()
+    {
+        return bossLevel;
+    }
 	
 	public void setState(LevelStates state)
     {
@@ -115,6 +156,10 @@ public class LevelState : MonoBehaviour {
             timeOfDayText.text = "Workday";
             generalTimer1 = 0;
             generalTimer2 = (0.1f * bossLevel * 10.0f) + 10.0f;
+        }
+        else if (currentLevelState.Equals(LevelStates.Build))
+        {
+            buildPhaseOnlyUIItems.SetActive(true);
         }
     }
 
@@ -128,12 +173,15 @@ public class LevelState : MonoBehaviour {
             generalTimer1 = 0;
             generalTimer2 = (0.1f * bossLevel * 10.0f) + 10.0f;
             makeMoney = true;
+
+            buildPhaseOnlyUIItems.SetActive(false);
         }
         else if (currentLevelState.Equals(LevelStates.Workday))
         {
             currentLevelState = LevelStates.Night;
             timeOfDayText.text = "Night";
             makeMoney = true;
+            buildPhaseOnlyUIItems.SetActive(false);
         }
         else if (currentLevelState.Equals(LevelStates.Night))
         {
@@ -142,7 +190,9 @@ public class LevelState : MonoBehaviour {
             curTimeText.text = "7:59 am";
             makeMoney = false;
             ++bossLevel;
+            currentDayText.text = "Day " + bossLevel;
             Inventory.inv.increasePay(bossLevel * 5);
+            buildPhaseOnlyUIItems.SetActive(true);
         }
     }
 
