@@ -39,6 +39,12 @@ public class LevelState : MonoBehaviour {
     private Text curTimeText;
 
     /// <summary>
+    /// Corresponds to the messages script
+    /// </summary>
+    [SerializeField]
+    private Messages messagesScript;
+
+    /// <summary>
     /// Corresponds to the UI items only available during the build phase
     /// </summary>
     [SerializeField]
@@ -200,7 +206,16 @@ public class LevelState : MonoBehaviour {
     {
         makeMoney = false;
         generalTimer1 = generalTimer2;
-        Inventory.inv.penalty(generalTimer1 / generalTimer2, bossLevel);
         currentLevelState = LevelStates.Night;
+        if (!Inventory.inv.penalty(generalTimer1 / generalTimer2, bossLevel))
+        {
+            //Lost the game
+            messagesScript.firedMessage();
+        }
+        else
+        {
+            messagesScript.displayMessage();
+        }
+        
     }
 }

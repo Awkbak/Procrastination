@@ -94,13 +94,11 @@ public class Inventory : MonoBehaviour{
         money += hourlyRate;
         updateMoneyUI();
     }
-    public void penalty(float percent, int level)
+    public bool penalty(float percent, int level)
     {
-        loseMoney((int) (50 * (1 / percent) * level));
-        if(money == 0)
-        {
-            print("Lose :(");
-        }
+
+        return loseMoney((int)(50 * (1 / percent) * level));
+
     }
 
     private void updateMoneyUI()
@@ -132,17 +130,22 @@ public class Inventory : MonoBehaviour{
         }
     }
 
-    public void loseMoney(int amount)
+    public bool loseMoney(int amount)
     {
-        if (amount >= money)
+        bool answer = true;
+
+        if (amount > money)
         {
             money = 0;
+            answer = false;
         }
         else
         {
             money -= amount;
         }
         updateMoneyUI();
+
+        return answer;
     }
 
     /// <summary>

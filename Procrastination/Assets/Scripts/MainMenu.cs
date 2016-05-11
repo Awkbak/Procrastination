@@ -17,7 +17,9 @@ public class MainMenu : MonoBehaviour {
         #if UNITY_ANDROID || UNITY_IPHONE
         //Make sure we are in landscape mode
         Screen.orientation = ScreenOrientation.LandscapeLeft;
-        #endif
+#endif
+
+        Random.seed = (int) System.DateTime.Now.Ticks;
     }
 
     void Start()
