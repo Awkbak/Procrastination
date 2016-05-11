@@ -6,7 +6,7 @@ public class Door : MonoBehaviour {
     /// <summary>
     /// The cost to buy this door
     /// </summary>
-    private int price = 0;
+    private int price = 250;
 
     /// <summary>
     /// The cieling of the office attached to this door

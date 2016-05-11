@@ -110,7 +110,7 @@ public class Inventory : MonoBehaviour{
     /// <returns>Whether or not "amout" was valid (more than you currently own)</returns>
     public bool subtractMoney(int amount)
     {
-        if(amount >= money)
+        if(amount > money)
         {
             return false;
         }
