@@ -15,7 +15,7 @@ public class FloorGenerator : MonoBehaviour {
         {
             for(int a = -19; a < 20; ++a)
             {
-                Instantiate(floorPrefab, new Vector3(e * 2, 0, a * 2), Quaternion.identity);
+                Instantiate(floorPrefab, new Vector3(e * 2 + .5f, 0.01f, a * 2 + .5f), Quaternion.identity);
             }
         }
 	}

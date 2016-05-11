@@ -114,6 +114,11 @@ public class CheckGen : MonoBehaviour {
                     panelMats[e].material = matGood;
                 }
             }
+            else
+            {
+                allGood = false;
+                panelMats[e].material = matBad;
+            }
         }
     }
 }

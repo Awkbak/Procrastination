@@ -161,7 +161,7 @@ public class LevelState : MonoBehaviour {
         {
             timeOfDayText.text = "Workday";
             generalTimer1 = 0;
-            generalTimer2 = (0.1f * bossLevel * 10.0f) + 10.0f;
+            generalTimer2 = (0.15f * bossLevel * 10.0f) + 10.0f;
         }
         else if (currentLevelState.Equals(LevelStates.Build))
         {

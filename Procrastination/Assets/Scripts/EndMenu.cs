@@ -14,7 +14,13 @@ public class EndMenu : MonoBehaviour {
 	void Start () {
         survivalText = GetComponent<Text>();
 
-        survivalText.text = "You survived " + LevelState.bossLevel + " days";
+        if (LevelState.bossLevel == 1)
+        {
+            survivalText.text = "You couldn't last even a single day...";
+        }
+        else {
+            survivalText.text = "You survived " + (LevelState.bossLevel - 1) + " days";
+        }
 
         if (!SaveGame.save.saveExists())
         {
