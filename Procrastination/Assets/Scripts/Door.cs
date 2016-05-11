@@ -56,7 +56,7 @@ public class Door : MonoBehaviour {
         if (!selected)
         {
             selected = true;
-            SelectedItemCanvas.can.select("Office Door", price, false, deselect, buyDoor);
+            SelectedItemCanvas.can.select("Door", price, false, deselect, buyDoor);
         }
 
     }
