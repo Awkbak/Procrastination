@@ -75,7 +75,7 @@ public class CameraMovement : Draggable {
     /// <summary>
     /// Coefficient of panning speed in order to make panning feel normal
     /// </summary>
-    private float speedFactor = 20.0f;
+    private float speedFactor = 10.0f;
 
     /// <summary>
     /// Pans the screen based on how the current touch is changing
@@ -116,4 +116,22 @@ public class CameraMovement : Draggable {
         return !reset;
     }
 #endif
+
+    public void zoomIn()
+    {
+       
+        if(Camera.main.orthographicSize > 6)
+        {
+            Camera.main.orthographicSize -= 2;
+        }
+    }
+
+    public void zoomOut()
+    {
+
+        if (Camera.main.orthographicSize < 24)
+        {
+            Camera.main.orthographicSize += 2;
+        }
+    }
 }

@@ -23,6 +23,7 @@ public class SaveGame : MonoBehaviour {
         else {
             Destroy(this.gameObject);
         }
+        //print(Application.persistentDataPath);
     }
 
     // Use this for initialization
@@ -56,7 +57,7 @@ public class SaveGame : MonoBehaviour {
     /// <returns></returns>
     public bool saveExists(string fileName = @"playersave.dat")
     {
-        return File.Exists(@"playersave.dat");
+        return File.Exists(Application.persistentDataPath + @"\playersave.dat");
     }
 
     public void setIsLoadingGame(bool value)
@@ -80,7 +81,7 @@ public class SaveGame : MonoBehaviour {
         save.Append('\n');
         saveInventory(save);
         saveWorkers(save);
-        System.IO.File.WriteAllText(@fileName, save.ToString());
+        System.IO.File.WriteAllText(Application.persistentDataPath + @"\" + @fileName, save.ToString());
     }
 
     /// <summary>
@@ -150,7 +151,8 @@ public class SaveGame : MonoBehaviour {
     {
         Scanner k;
         try {
-            k = new Scanner(System.IO.File.ReadAllText(@fileName));
+
+            k = new Scanner(System.IO.File.ReadAllText(Application.persistentDataPath + @"\" + @fileName));
 
         }
         catch (FileNotFoundException e)
@@ -163,7 +165,6 @@ public class SaveGame : MonoBehaviour {
         do
         {
             word = k.getNextWord();
-            print("G" + word + "G");
             switch (word)
             {
                 case "NAME":

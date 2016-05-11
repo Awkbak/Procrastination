@@ -149,7 +149,7 @@ public class Touch_Handler : MonoBehaviour {
                         else if (hit.collider.CompareTag("Door"))
                         {
                             Door door = hit.collider.GetComponent<Door>();
-
+                            door.selectDoor();
 
                         }
                         
@@ -200,13 +200,17 @@ public class Touch_Handler : MonoBehaviour {
     {
         //Create the hit object and ray
         RaycastHit hit = new RaycastHit();
-        Ray ray = new Ray(new Vector3(pos.x, 10.0f, pos.y), new Vector3(0, -1, 0));
+        Ray ray = new Ray(new Vector3(pos.x, 15.0f, pos.y), new Vector3(0, -1, 0));
 
         //Draw the ray for debugging
-        Debug.DrawRay(new Vector3(pos.x, 10.0f, pos.y), new Vector3(0, -1, 0), Color.green, 10.0f);
+        Debug.DrawRay(new Vector3(pos.x, 15.0f, pos.y), new Vector3(0, -1, 0), Color.green, 15.0f);
         //Cast out the ray and return it's tag if there is a hit
         if (Physics.Raycast(ray, out hit, 10.1f))
         {
+            if(hit.collider.transform.position.y > 3)
+            {
+                return "";
+            }
             return hit.collider.tag;
         }
         //If no hit, then return an empty string

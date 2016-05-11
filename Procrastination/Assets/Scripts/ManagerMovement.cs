@@ -88,10 +88,11 @@ public class ManagerMovement : MonoBehaviour {
         Node pathNode = AStar.solve();
         if(pathNode == null)
         {
-            print("No path found");
+            //print("No path found");
         }
         else
         {//Print path
+            /*
             Node current = pathNode;
             string path = "";
             while (current.child != null)
@@ -101,6 +102,7 @@ public class ManagerMovement : MonoBehaviour {
             }
             path += current.x + ":" + current.y + "  :  ";
             Debug.Log(path);
+            */
         }
         
     }
@@ -135,7 +137,7 @@ public class ManagerMovement : MonoBehaviour {
                         }
                         else
                         {
-                            print("Done");
+                           // print("Done");
                             stopMoving();
                         }
                     }
@@ -204,7 +206,7 @@ public class ManagerMovement : MonoBehaviour {
                         }
                         else
                         {
-                            print("Done");
+                            //print("Done");
                             stopMoving();
                             finishLevel();
                         }
@@ -303,16 +305,13 @@ public class ManagerMovement : MonoBehaviour {
 
     void OnTriggerEnter(Collider other)
     {
-        print("Triggered");
         if (other.tag.Contains("Watercooler"))
         {
-            print("Cooler");
             genericTimer1 = Random.Range(1.0f, 2.0f);
             state = ManagerStates.Distracted;
         }
         else if (other.tag.Contains("Minion"))
         {
-            print("Cooler");
             //If procrastinating, then wait longer than if productive
             genericTimer1 = Random.Range(1.0f, 2.0f);
             state = ManagerStates.Distracted;
