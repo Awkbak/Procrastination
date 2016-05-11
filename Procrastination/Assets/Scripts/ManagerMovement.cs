@@ -20,6 +20,11 @@ public class ManagerMovement : MonoBehaviour {
     private ManagerStates state = ManagerStates.Idle;
 
     /// <summary>
+    /// This objects animator component
+    /// </summary>
+    private Animator animator;
+
+    /// <summary>
     /// The manager's start position
     /// </summary>
     private Vector3 startPos;
@@ -65,6 +70,7 @@ public class ManagerMovement : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         rigidbody = GetComponent<Rigidbody>();
+        animator = GetComponent<Animator>();
 
         //Get where the manager starts on the level
         startPos = GameObject.FindGameObjectWithTag("ManagerStart").transform.position;
@@ -105,7 +111,7 @@ public class ManagerMovement : MonoBehaviour {
         {
             if (setUpMovement)
             {
-
+                animator.SetFloat("Velocity", movementSpeed);
                 startMoving();
             }
             else
@@ -132,6 +138,22 @@ public class ManagerMovement : MonoBehaviour {
                     //print(nextPos + " : " + direction);
                     direction.Normalize();
                     rigidbody.velocity = -direction * movementSpeed;
+                    if (direction.x < 0)
+                    {
+                        transform.rotation = Quaternion.Euler(0, 90, 0);
+                    }
+                    else if (direction.x > 0)
+                    {
+                        transform.rotation = Quaternion.Euler(0, -90, 0);
+                    }
+                    else if (direction.z < 0)
+                    {
+                        transform.rotation = Quaternion.Euler(0, 0, 0);
+                    }
+                    else
+                    {
+                        transform.rotation = Quaternion.Euler(0, 180, 0);
+                    }
                 }
                 else if (state.Equals(ManagerStates.Distracted))
                 {
@@ -145,6 +167,7 @@ public class ManagerMovement : MonoBehaviour {
                 else
                 {
                     rigidbody.velocity = Vector3.zero;
+                    animator.SetFloat("Velocity", 0);
                 }
             }
 
@@ -158,6 +181,7 @@ public class ManagerMovement : MonoBehaviour {
         {
             if (setUpLeaving)
             {
+                animator.SetFloat("Velocity", movementSpeed);
                 state = ManagerStates.Leaving;
                 setUpLeaving = false;
             }
@@ -184,6 +208,22 @@ public class ManagerMovement : MonoBehaviour {
                     //print(nextPos + " : " + direction);
                     direction.Normalize();
                     rigidbody.velocity = -direction * movementSpeed;
+                    if (direction.x < 0)
+                    {
+                        transform.rotation = Quaternion.Euler(0, 90, 0);
+                    }
+                    else if (direction.x > 0)
+                    {
+                        transform.rotation = Quaternion.Euler(0, -90, 0);
+                    }
+                    else if (direction.z < 0)
+                    {
+                        transform.rotation = Quaternion.Euler(0, 0, 0);
+                    }
+                    else
+                    {
+                        transform.rotation = Quaternion.Euler(0, 180, 0);
+                    }
                 }
                 else if (state.Equals(ManagerStates.Distracted))
                 {
@@ -197,6 +237,7 @@ public class ManagerMovement : MonoBehaviour {
                 else
                 {
                     rigidbody.velocity = Vector3.zero;
+                    animator.SetFloat("Velocity", 0);
                 }
             }
 
@@ -220,11 +261,12 @@ public class ManagerMovement : MonoBehaviour {
         state = ManagerStates.Going;
         Vector3 startPosTrans = startPos;
         startPosTrans.z = startPos.y;
-        startPos.y = 0.7f;
+        startPos.y = 0.0f;
         transform.position = startPos;
 
         nextNode = AStar.solve();
         nextPos = nextNode.generateVector3();
+        animator.SetFloat("Velocity", movementSpeed);
 
     }
 
@@ -233,6 +275,7 @@ public class ManagerMovement : MonoBehaviour {
         moving = false;
         state = ManagerStates.Idle;
         rigidbody.velocity = Vector3.zero;
+        animator.SetFloat("Velocity", 0);
 
     }
 
