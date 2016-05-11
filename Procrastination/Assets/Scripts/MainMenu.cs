@@ -11,6 +11,18 @@ public class MainMenu : MonoBehaviour {
     [SerializeField]
     private GameObject loadGameButton;
 
+    /// <summary>
+    /// Holds the instructions UI Text
+    /// </summary>
+    [SerializeField]
+    private Text instructions;
+
+    /// <summary>
+    /// Holds the non-instructions UI Text
+    /// </summary>
+    [SerializeField]
+    private GameObject nonInstructions;
+
     void Awake()
     {
         //Orientation is only on mobile
@@ -55,5 +67,11 @@ public class MainMenu : MonoBehaviour {
     public void exitGame()
     {
         Application.Quit();
+    }
+
+    public void toggleInstructions()
+    {
+        instructions.enabled = !instructions.enabled;
+        nonInstructions.SetActive(!nonInstructions.activeSelf);
     }
 }
