@@ -60,7 +60,7 @@ public class ManagerMovement : MonoBehaviour {
     /// <summary>
     /// This manager's movement speed in Units/Second
     /// </summary>
-    private float movementSpeed = 5.0f;
+    private float movementSpeed = 2.0f;
 
     /// <summary>
     /// A generic timer for timing things
@@ -128,6 +128,10 @@ public class ManagerMovement : MonoBehaviour {
                         {
                             nextNode = nextNode.child;
                             nextPos = nextNode.generateVector3();
+                            if(nextNode.child == null)
+                            {
+                                caughtMinion();
+                            }
                         }
                         else
                         {
@@ -277,6 +281,13 @@ public class ManagerMovement : MonoBehaviour {
         rigidbody.velocity = Vector3.zero;
         animator.SetFloat("Velocity", 0);
 
+    }
+
+    private void caughtMinion()
+    {
+        stopMoving();
+        LevelState.cur.gotCaught();
+        
     }
 
     /// <summary>

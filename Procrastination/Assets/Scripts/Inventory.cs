@@ -14,7 +14,7 @@ public class Inventory : MonoBehaviour{
     /// <summary>
     /// How much money do you have
     /// </summary>
-    public int money = 2;
+    private int money = 500;
 
     /// <summary>
     /// List of objects the user can spawn
@@ -84,6 +84,14 @@ public class Inventory : MonoBehaviour{
         money += hourlyRate;
         updateMoneyUI();
     }
+    public void penalty(float percent, int level)
+    {
+        loseMoney((int) (50 * (1 / percent) * level));
+        if(money == 0)
+        {
+            print("Lose :(");
+        }
+    }
 
     private void updateMoneyUI()
     {
@@ -112,6 +120,19 @@ public class Inventory : MonoBehaviour{
             updateMoneyUI();
             return true;
         }
+    }
+
+    public void loseMoney(int amount)
+    {
+        if (amount >= money)
+        {
+            money = 0;
+        }
+        else
+        {
+            money -= amount;
+        }
+        updateMoneyUI();
     }
 
     /// <summary>

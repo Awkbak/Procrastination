@@ -32,6 +32,11 @@ public class LevelState : MonoBehaviour {
     private Text curTimeText;
 
     /// <summary>
+    /// Can you make money?
+    /// </summary>
+    private bool makeMoney = false;
+
+    /// <summary>
     /// The current game's boss level
     /// </summary>
     private int bossLevel = 1;
@@ -58,6 +63,11 @@ public class LevelState : MonoBehaviour {
         curTimeText.text = "7:59 am";
 	}
 
+    void Start()
+    {
+        Inventory.inv.increasePay(5);
+    }
+
     public void FixedUpdate()
     {
         if (currentLevelState.Equals(LevelStates.Workday) || currentLevelState.Equals(LevelStates.Night))
@@ -82,7 +92,10 @@ public class LevelState : MonoBehaviour {
 
             if(currentHour != hour)
             {
-                Inventory.inv.payDay();
+                if (makeMoney)
+                {
+                    Inventory.inv.payDay();
+                }
                 currentHour = hour;
             }
 
@@ -101,7 +114,7 @@ public class LevelState : MonoBehaviour {
         {
             timeOfDayText.text = "Workday";
             generalTimer1 = 0;
-            generalTimer2 = (0.15f * bossLevel * 15.0f) + 15.0f;
+            generalTimer2 = (0.1f * bossLevel * 10.0f) + 10.0f;
         }
     }
 
@@ -113,18 +126,31 @@ public class LevelState : MonoBehaviour {
             timeOfDayText.text = "Workday";
             currentHour = 0;
             generalTimer1 = 0;
-            generalTimer2 = (0.15f * bossLevel * 15.0f) + 15.0f;
+            generalTimer2 = (0.1f * bossLevel * 10.0f) + 10.0f;
+            makeMoney = true;
         }
         else if (currentLevelState.Equals(LevelStates.Workday))
         {
             currentLevelState = LevelStates.Night;
             timeOfDayText.text = "Night";
+            makeMoney = true;
         }
         else if (currentLevelState.Equals(LevelStates.Night))
         {
             currentLevelState = LevelStates.Build;
             timeOfDayText.text = "Early Morning";
             curTimeText.text = "7:59 am";
+            makeMoney = false;
+            ++bossLevel;
+            Inventory.inv.increasePay(bossLevel * 5);
         }
+    }
+
+    public void gotCaught()
+    {
+        makeMoney = false;
+        generalTimer1 = generalTimer2;
+        Inventory.inv.penalty(generalTimer1 / generalTimer2, bossLevel);
+        currentLevelState = LevelStates.Night;
     }
 }
