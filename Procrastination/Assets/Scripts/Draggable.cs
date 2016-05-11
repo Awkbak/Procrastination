@@ -71,14 +71,16 @@ public class Draggable : MonoBehaviour {
             child.appear();
         }
         //Snap mousePos to the nearing tile
-        mousePos.x -= mousePos.x % tileSize;
-        mousePos.y -= mousePos.y % tileSize;
+        mousePos.x -= mousePos.x % tileSize - 0.5f;
+        mousePos.y -= mousePos.y % tileSize - 0.5f;
         //If the mousePos changed this time
         if (!mousePos.Equals(transform.position))
         {
+            transform.position = new Vector3(mousePos.x, transform.position.y, mousePos.y);
+
             //Update the obstruction panels and move to the new position
             child.recheck();
-            transform.position = new Vector3(mousePos.x, transform.position.y, mousePos.y);
+            
         }
     }
 

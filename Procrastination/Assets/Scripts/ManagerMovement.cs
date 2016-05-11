@@ -144,15 +144,15 @@ public class ManagerMovement : MonoBehaviour {
                     //print(nextPos + " : " + direction);
                     direction.Normalize();
                     rigidbody.velocity = -direction * movementSpeed;
-                    if (direction.x < 0)
+                    if (direction.x < -0.5)
                     {
                         transform.rotation = Quaternion.Euler(0, 90, 0);
                     }
-                    else if (direction.x > 0)
+                    else if (direction.x > 0.5)
                     {
                         transform.rotation = Quaternion.Euler(0, -90, 0);
                     }
-                    else if (direction.z < 0)
+                    else if (direction.z < -0.5)
                     {
                         transform.rotation = Quaternion.Euler(0, 0, 0);
                     }
@@ -214,15 +214,15 @@ public class ManagerMovement : MonoBehaviour {
                     //print(nextPos + " : " + direction);
                     direction.Normalize();
                     rigidbody.velocity = -direction * movementSpeed;
-                    if (direction.x < 0)
+                    if (direction.x < -0.01)
                     {
                         transform.rotation = Quaternion.Euler(0, 90, 0);
                     }
-                    else if (direction.x > 0)
+                    else if (direction.x > 0.01)
                     {
                         transform.rotation = Quaternion.Euler(0, -90, 0);
                     }
-                    else if (direction.z < 0)
+                    else if (direction.z < -0.01)
                     {
                         transform.rotation = Quaternion.Euler(0, 0, 0);
                     }
@@ -476,7 +476,7 @@ public class AStar
     public static bool positionAvailable(Node node)
     {
         //Get the tag of what is on the node
-        string tag = Touch_Handler.handler.raycast(node.x, node.y);
+        string tag = Touch_Handler.handler.raycast(new Vector2(node.x - 0.5f, node.y - 0.5f));
         //Return if it is pathable based on tag
         return (tag.Equals("Ground") || tag.Equals("PlayerDesk") || tag.Equals("ManagerStart"));
     }
@@ -565,7 +565,7 @@ public class Node : System.IEquatable<Node>, System.IComparable<Node>
 
     public Vector3 generateVector3()
     {
-        return new Vector3(x, 0, y);
+        return new Vector3(x - 0.5f, 0, y - 0.5f);
     }
 
     public bool Equals(Node other)
